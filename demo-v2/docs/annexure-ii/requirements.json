@@ -1,0 +1,1752 @@
+[
+ {
+  "no": 1,
+  "category": "Roles",
+  "sub": "Employee",
+  "subsub": "",
+  "text": "Raise request to be withdrawn from own training"
+ },
+ {
+  "no": 2,
+  "category": "Roles",
+  "sub": "Employee",
+  "subsub": "",
+  "text": "Check personal training calendar"
+ },
+ {
+  "no": 3,
+  "category": "Roles",
+  "sub": "Employee",
+  "subsub": "",
+  "text": "Mark attendance against specific training"
+ },
+ {
+  "no": 4,
+  "category": "Roles",
+  "sub": "Employee",
+  "subsub": "",
+  "text": "Provide feedback against specific training"
+ },
+ {
+  "no": 5,
+  "category": "Roles",
+  "sub": "Employee",
+  "subsub": "",
+  "text": "Check personal training record for a time frame"
+ },
+ {
+  "no": 6,
+  "category": "Roles",
+  "sub": "Employee",
+  "subsub": "",
+  "text": "Request to add personal training record in the database"
+ },
+ {
+  "no": 7,
+  "category": "Roles",
+  "sub": "Employee",
+  "subsub": "",
+  "text": "Others"
+ },
+ {
+  "no": 8,
+  "category": "Roles",
+  "sub": "Supervisor",
+  "subsub": "",
+  "text": "Same role as 'Employee'"
+ },
+ {
+  "no": 9,
+  "category": "Roles",
+  "sub": "Supervisor",
+  "subsub": "",
+  "text": "Approve withdrawal request by 'Employee'"
+ },
+ {
+  "no": 10,
+  "category": "Roles",
+  "sub": "Supervisor",
+  "subsub": "",
+  "text": "Add replacement (get notification on nominees' calendar conflict / leave / resignation / retirement during nomination)"
+ },
+ {
+  "no": 11,
+  "category": "Roles",
+  "sub": "Supervisor",
+  "subsub": "",
+  "text": "Check 'Employees' (individual, multiple as well as all) training record for a time frame"
+ },
+ {
+  "no": 12,
+  "category": "Roles",
+  "sub": "Supervisor",
+  "subsub": "",
+  "text": "Download customized reports based on training labels within a time frame"
+ },
+ {
+  "no": 13,
+  "category": "Roles",
+  "sub": "Division Head / Learning Champion",
+  "subsub": "",
+  "text": "Same role as 'Employee' and 'Supervisor'"
+ },
+ {
+  "no": 14,
+  "category": "Roles",
+  "sub": "Division Head / Learning Champion",
+  "subsub": "",
+  "text": "Submit new training request to ADMIN (HR) through 'Training Request' module"
+ },
+ {
+  "no": 15,
+  "category": "Roles",
+  "sub": "Division Head / Learning Champion",
+  "subsub": "",
+  "text": "Customized dashboard reflecting training summary of the division (department / segment wise within a time frame)"
+ },
+ {
+  "no": 16,
+  "category": "Roles",
+  "sub": "Trainer",
+  "subsub": "",
+  "text": "Same role as 'Employee' and 'Supervisor'"
+ },
+ {
+  "no": 17,
+  "category": "Roles",
+  "sub": "Trainer",
+  "subsub": "",
+  "text": "Accept / Reject (with reason) invitation to facilitate"
+ },
+ {
+  "no": 18,
+  "category": "Roles",
+  "sub": "Trainer",
+  "subsub": "",
+  "text": "Access to exclusive calendar / To do schedule as trainer"
+ },
+ {
+  "no": 19,
+  "category": "Roles",
+  "sub": "Trainer",
+  "subsub": "",
+  "text": "Upload training materials in LMS and request HR Admin to link the materials to trainings"
+ },
+ {
+  "no": 20,
+  "category": "Roles",
+  "sub": "HR Admin (ADMIN (HR))",
+  "subsub": "",
+  "text": ""
+ },
+ {
+  "no": 21,
+  "category": "Roles",
+  "sub": "Admin",
+  "subsub": "",
+  "text": "All access and option management"
+ },
+ {
+  "no": 22,
+  "category": "Setup Options",
+  "sub": "Competency",
+  "subsub": "",
+  "text": "Functional, Innovation, Collaboration, Customer Experience, Leadership, Execution Excellence etc. add more"
+ },
+ {
+  "no": 23,
+  "category": "Setup Options",
+  "sub": "Training Tags/ Labels",
+  "subsub": "",
+  "text": "City Foundation, Banking Foundation, AML, ICT, CRM, Risk, Islamic Banking, ISS, IGN, FRA, City Future Fit, MT Development, Credit, GB, POSH, Foreign Trade, Anti- Bribery & Corruption, Values, Speak Up, Sustainable Finance, Clearing, BACH, Fraud Risk, ICC, ESRM, SME, Fire Drill etc. and add more)"
+ },
+ {
+  "no": 24,
+  "category": "Setup Options",
+  "sub": "Training Tags/ Labels",
+  "subsub": "",
+  "text": "Data entry boxes: tag name, short tag"
+ },
+ {
+  "no": 25,
+  "category": "Setup Options",
+  "sub": "Training Category",
+  "subsub": "",
+  "text": "General, Functional, Soft-skill, Mandatory etc. and add more"
+ },
+ {
+  "no": 26,
+  "category": "Setup Options",
+  "sub": "Training Medium",
+  "subsub": "",
+  "text": "Classroom, Webinar, e-Learning etc. and add more"
+ },
+ {
+  "no": 27,
+  "category": "Setup Options",
+  "sub": "Mode of Training",
+  "subsub": "",
+  "text": "In-house, External-local, External-foreign etc. and add more"
+ },
+ {
+  "no": 28,
+  "category": "Setup Options",
+  "sub": "Training Title",
+  "subsub": "",
+  "text": "A search button for the ADMIN (HR) to check for similar training name in the existing database prior to the entry"
+ },
+ {
+  "no": 29,
+  "category": "Setup Options",
+  "sub": "Training Title",
+  "subsub": "",
+  "text": "Add 'Training Name' text box. System will check validation with existing training database and allow for a new entry only if there is no duplication"
+ },
+ {
+  "no": 30,
+  "category": "Setup Options",
+  "sub": "Training Title",
+  "subsub": "",
+  "text": "Add 'Competency' drop down option (data available in 'Competency' setup)"
+ },
+ {
+  "no": 31,
+  "category": "Setup Options",
+  "sub": "Training Venue",
+  "subsub": "",
+  "text": "A search button for the ADMIN (HR) to check for similar training venue in the existing database prior to the entry"
+ },
+ {
+  "no": 32,
+  "category": "Setup Options",
+  "sub": "Training Venue",
+  "subsub": "",
+  "text": "Data entry text boxes: Venue name, Address, Short name etc."
+ },
+ {
+  "no": 33,
+  "category": "Setup Options",
+  "sub": "Training Venue",
+  "subsub": "",
+  "text": "System will check validation of address box with existing venue database and allow for a new entry only if there is no duplication"
+ },
+ {
+  "no": 34,
+  "category": "Setup Options",
+  "sub": "Training Venue",
+  "subsub": "",
+  "text": "Document (doc, pdf, jpeg, png) uploader to keep record of the related files"
+ },
+ {
+  "no": 35,
+  "category": "Setup Options",
+  "sub": "Trainer",
+  "subsub": "",
+  "text": "Add drop-down option: 'Internal' and 'External'"
+ },
+ {
+  "no": 36,
+  "category": "Setup Options",
+  "sub": "Trainer",
+  "subsub": "",
+  "text": "Add information boxes; 'Employee ID', 'Name', 'Designation', 'Institute', 'Contact No.', 'Email', 'LinkedIn Profile Link' etc.\n(If 'Internal' option is selected; trainer information can be pulled from Employee Database with the entry of 'Employee ID')"
+ },
+ {
+  "no": 37,
+  "category": "Setup Options",
+  "sub": "Trainer",
+  "subsub": "",
+  "text": "Add Bulk Upload option"
+ },
+ {
+  "no": 38,
+  "category": "Setup Options",
+  "sub": "Vendor",
+  "subsub": "",
+  "text": "A search button for the ADMIN (HR) to check for similar training vendor in the existing database prior to the entry"
+ },
+ {
+  "no": 39,
+  "category": "Setup Options",
+  "sub": "Vendor",
+  "subsub": "",
+  "text": "Data entry boxes: vendor name, contact person, email address, phone number, TIN information, BIN information etc."
+ },
+ {
+  "no": 40,
+  "category": "Setup Options",
+  "sub": "Vendor",
+  "subsub": "",
+  "text": "System will check validation with existing vendor database and allow for a new entry only if there is no duplication"
+ },
+ {
+  "no": 41,
+  "category": "Setup Options",
+  "sub": "Vendor",
+  "subsub": "",
+  "text": "Document (doc, pdf, jpeg, png) uploader to keep record of the related files"
+ },
+ {
+  "no": 42,
+  "category": "Setup Options",
+  "sub": "Vendor",
+  "subsub": "",
+  "text": "Email template for communication to share vendor information with others"
+ },
+ {
+  "no": 43,
+  "category": "Setup Options",
+  "sub": "Training Calendar",
+  "subsub": "",
+  "text": "Approved training calendar to be uploaded here under specific year by 'Admin'"
+ },
+ {
+  "no": 44,
+  "category": "Setup Options",
+  "sub": "Training Calendar",
+  "subsub": "",
+  "text": "Once planned, training schedules from 'Module 3: Training Scheduling' to be continuously accumulated here"
+ },
+ {
+  "no": 45,
+  "category": "Setup Options",
+  "sub": "Feedback Setup",
+  "subsub": "",
+  "text": "Add 'Add New Question' text box"
+ },
+ {
+  "no": 46,
+  "category": "Setup Options",
+  "sub": "Feedback Setup",
+  "subsub": "",
+  "text": "Add options like 'MCQ', 'Text box', 'Tick-box' etc. which Admin can choose to design the feedback templates"
+ },
+ {
+  "no": 47,
+  "category": "Setup Options",
+  "sub": "External Trainee / Participant",
+  "subsub": "",
+  "text": "Add information boxes; 'Company Name', 'Company Employee ID', 'Name', 'Designation / Role', 'Contact No.' etc."
+ },
+ {
+  "no": 48,
+  "category": "Setup Options",
+  "sub": "External Trainee / Participant",
+  "subsub": "",
+  "text": "Add Bulk Upload option and bulk upload template"
+ },
+ {
+  "no": 49,
+  "category": "Training Management System",
+  "sub": "Training Request",
+  "subsub": "Program Tab Setup",
+  "text": "Once setup window is opened, system will automatically assign a unique sequential number as ID to the request. However, the number is fixed once the setup is saved."
+ },
+ {
+  "no": 50,
+  "category": "Training Management System",
+  "sub": "Training Request",
+  "subsub": "Program Tab Setup",
+  "text": "Add 'Training Title' option."
+ },
+ {
+  "no": 51,
+  "category": "Training Management System",
+  "sub": "Training Request",
+  "subsub": "Program Tab Setup",
+  "text": "Add duration of training – date & time with man-hour per participant (repeat schedule options for single training delivered in multiple days)"
+ },
+ {
+  "no": 52,
+  "category": "Training Management System",
+  "sub": "Training Request",
+  "subsub": "Program Tab Setup",
+  "text": "Add 'Venue' option (text box – suggested venue by the requester)."
+ },
+ {
+  "no": 53,
+  "category": "Training Management System",
+  "sub": "Training Request",
+  "subsub": "Program Tab Setup",
+  "text": "Add 'Training Mode' (data available in 'Training Mode' setup – single choice)"
+ },
+ {
+  "no": 54,
+  "category": "Training Management System",
+  "sub": "Training Request",
+  "subsub": "Program Tab Setup",
+  "text": "Add 'Training Medium' (data available in 'Training Medium' setup – single choice)"
+ },
+ {
+  "no": 55,
+  "category": "Training Management System",
+  "sub": "Training Request",
+  "subsub": "Program Tab Setup",
+  "text": "Add 'Training Tags / Labels' information (data available in 'Training Tags / Labels' setup – multiple choice)"
+ },
+ {
+  "no": 56,
+  "category": "Training Management System",
+  "sub": "Training Request",
+  "subsub": "Program Tab Setup",
+  "text": "Add 'Upload Content' button to attach resource material (non-mandatory field)"
+ },
+ {
+  "no": 57,
+  "category": "Training Management System",
+  "sub": "Training Request",
+  "subsub": "Program Tab Setup",
+  "text": "Add 'Save & Next' option to go to the 'Trainer Tab Setup'"
+ },
+ {
+  "no": 58,
+  "category": "Training Management System",
+  "sub": "Training Request",
+  "subsub": "Trainer Tab Setup",
+  "text": "Add 'Trainer Details' option. A search button will be available to search by name or EID"
+ },
+ {
+  "no": 59,
+  "category": "Training Management System",
+  "sub": "Training Request",
+  "subsub": "Trainer Tab Setup",
+  "text": "Add 'Topic Name' option beside 'Trainer Details'"
+ },
+ {
+  "no": 60,
+  "category": "Training Management System",
+  "sub": "Training Request",
+  "subsub": "Trainer Tab Setup",
+  "text": "Add 'Session Duration' beside 'Topic Name'"
+ },
+ {
+  "no": 61,
+  "category": "Training Management System",
+  "sub": "Training Request",
+  "subsub": "Trainer Tab Setup",
+  "text": "Add 'Add More' button to add more than one detail"
+ },
+ {
+  "no": 62,
+  "category": "Training Management System",
+  "sub": "Training Request",
+  "subsub": "Trainer Tab Setup",
+  "text": "Add 'Previous', 'Save & Next' and 'Skip & Next' options at the bottom of the page"
+ },
+ {
+  "no": 63,
+  "category": "Training Management System",
+  "sub": "Training Request",
+  "subsub": "Nominations Tab Setup",
+  "text": "Add 'Select Participant' option. Participant details to be linked from employee database.\n- Individual EID / name entry\n- Bulk Upload option"
+ },
+ {
+  "no": 64,
+  "category": "Training Management System",
+  "sub": "Training Request",
+  "subsub": "Nominations Tab Setup",
+  "text": "Add 'Save & Exit' button"
+ },
+ {
+  "no": 65,
+  "category": "Training Management System",
+  "sub": "Training Request Received (ADMIN (HR) Module)",
+  "subsub": "",
+  "text": "ADMIN (HR) will get a window with summary of all the training requests. Add information like 'Training Name', 'Venue', 'From Date', 'To Date', 'Proposed Pax' etc."
+ },
+ {
+  "no": 66,
+  "category": "Training Management System",
+  "sub": "Training Request Received (ADMIN (HR) Module)",
+  "subsub": "",
+  "text": "Add 'Schedule Training' and 'Forward' button beside each training summary.\n- If 'Forward' button is clicked, pop-up data entry box will be opened. Request can be assigned to specific HR Admin\n- If 'Schedule Training' button is clicked, onward processing will be done in the 'Training Scheduling' module (outlined later)"
+ },
+ {
+  "no": 67,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Program Tab Setup",
+  "text": "Once setup window is opened, system will automatically assign a unique sequential number as ID to the nomination request. However, the number is fixed once the setup is saved."
+ },
+ {
+  "no": 68,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Program Tab Setup",
+  "text": "Add title from 'Training Title' setup. Title can be searched with keywords using a search button"
+ },
+ {
+  "no": 69,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Program Tab Setup",
+  "text": "Add duration of training – date & time with man-hour per participant (repeat schedule options for single training delivered in multiple days)"
+ },
+ {
+  "no": 70,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Program Tab Setup",
+  "text": "Add venue from drop-down option (data available in 'Training Venue' setup – single choice)"
+ },
+ {
+  "no": 71,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Program Tab Setup",
+  "text": "Training venue will be validated with already existing planned calendar (data available in 'Training Calendar' setup). Pop-up message to be displayed if duplication is found in the combination of training venue and date & time"
+ },
+ {
+  "no": 72,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Program Tab Setup",
+  "text": "Add 'Training Category' (data available in 'Training Category' setup – single choice)"
+ },
+ {
+  "no": 73,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Program Tab Setup",
+  "text": "Add 'Training Mode' (data available in 'Training Mode' setup – single choice)"
+ },
+ {
+  "no": 74,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Program Tab Setup",
+  "text": "Add 'Training Medium' (data available in 'Training Medium' setup – single choice)"
+ },
+ {
+  "no": 75,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Program Tab Setup",
+  "text": "Add 'Training Tags / Labels' information (data available in 'Training Tags / Labels' setup – multiple choice)"
+ },
+ {
+  "no": 76,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Program Tab Setup",
+  "text": "Add 'PDUs' text box"
+ },
+ {
+  "no": 77,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Program Tab Setup",
+  "text": "Add organized by from drop-down option (data available in 'Vendor' setup)"
+ },
+ {
+  "no": 78,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Program Tab Setup",
+  "text": "Add 'Save & Next' option to go to the 'Trainer Tab Setup'"
+ },
+ {
+  "no": 79,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Trainer Tab Setup",
+  "text": "Add 'Trainer Details' option. A search button for the ADMIN (HR) to search by name or EID"
+ },
+ {
+  "no": 80,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Trainer Tab Setup",
+  "text": "Add 'Topic Name' option beside 'Trainer Details'"
+ },
+ {
+  "no": 81,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Trainer Tab Setup",
+  "text": "Add 'Session Duration' beside 'Topic Name'"
+ },
+ {
+  "no": 82,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Trainer Tab Setup",
+  "text": "Add 'Add More' button to add more than one detail"
+ },
+ {
+  "no": 83,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Trainer Tab Setup",
+  "text": "Add 'Remove' option beside each trainer for ADMIN (HR) in case the trainer is to be removed"
+ },
+ {
+  "no": 84,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Trainer Tab Setup",
+  "text": "Add 'Previous', 'Save & Next' and 'Skip & Next' options at the bottom of the page"
+ },
+ {
+  "no": 85,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Nomination Tab Setup",
+  "text": "Add 'Nomination Deadline' box to select date & time"
+ },
+ {
+  "no": 86,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Nomination Tab Setup",
+  "text": "Training is saved and nomination request is sent to the selected division / function heads and learning champions through email"
+ },
+ {
+  "no": 87,
+  "category": "Training Management System",
+  "sub": "Training Nomination Request Setup",
+  "subsub": "Nomination Tab Setup",
+  "text": "Customizable mail template is needed with a redirect link to nominate"
+ },
+ {
+  "no": 88,
+  "category": "Training Management System",
+  "sub": "",
+  "subsub": "",
+  "text": "Nomination Process\n- Division / function heads will click the link and be redirected to own dashboard\n- Nomination window for this training will be opened and they can add participants as per 'Division Head / Learning Champion' role\n- Nomination received within deadline will be accumulated in the participant list in Training scheduling module"
+ },
+ {
+  "no": 89,
+  "category": "Training Management System",
+  "sub": "Training Nomination Received",
+  "subsub": "",
+  "text": "ADMIN (HR) can check 'Training Nomination Status' dashboard. A summary list of the nomination request sent will be displayed here"
+ },
+ {
+  "no": 90,
+  "category": "Training Management System",
+  "sub": "Training Nomination Received",
+  "subsub": "",
+  "text": "Add basic information like 'Training Name', 'Training Date', 'Organized By', 'Nomination Deadline', 'Nominations Received' etc. to be displayed here"
+ },
+ {
+  "no": 91,
+  "category": "Training Management System",
+  "sub": "Training Nomination Received",
+  "subsub": "",
+  "text": "Add 'Details' option at the right most column. ADMIN (HR) can click on the 'Details' option and check and edit the training summary as well as details of the nominations received"
+ },
+ {
+  "no": 92,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Program Tab Setup",
+  "text": "Once setup window is opened, system will automatically assign a unique sequential number as training ID (e.g. 20250109) to the training. However, the number is fixed once the setup is saved."
+ },
+ {
+  "no": 93,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Program Tab Setup",
+  "text": "Add 'Load Training Profile' option with drop-down 'Yes' and 'No'."
+ },
+ {
+  "no": 94,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Program Tab Setup",
+  "text": "(If 'Yes' option is selected) Add a drop-down list of training setups. The data is pulled from training profile created in 'Training Nomination Request Setup' (unscheduled and of future date, multiple selection)"
+ },
+ {
+  "no": 95,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Program Tab Setup",
+  "text": "(If 'Yes' option is selected) The training is selected, all related information and nominations will be loaded here"
+ },
+ {
+  "no": 96,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Program Tab Setup",
+  "text": "(If 'No' option is selected) Add title from 'Training Title' setup. Title can be searched with keywords using a search button (the training will be tagged with the specific training request if it is done from the 'Training Request Received' window)"
+ },
+ {
+  "no": 97,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Program Tab Setup",
+  "text": "(If 'No' option is selected) Add duration of training – date & time with man-hour per participant (repeat schedule options for single training delivered in multiple days)"
+ },
+ {
+  "no": 98,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Program Tab Setup",
+  "text": "(If 'No' option is selected) Add venue from drop-down option (data available in 'Training Venue' setup – single choice)"
+ },
+ {
+  "no": 99,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Program Tab Setup",
+  "text": "(If 'No' option is selected) Training venue will be validated with already existing planned calendar (data available in 'Training Calendar' setup). Pop-up message to be displayed if duplication is found in the combination of training venue and date & time"
+ },
+ {
+  "no": 100,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Program Tab Setup",
+  "text": "(If 'No' option is selected) Add 'Training Category' (data available in 'Training Category' setup – single choice)"
+ },
+ {
+  "no": 101,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Program Tab Setup",
+  "text": "(If 'No' option is selected) Add 'Training Mode' (data available in 'Training Mode' setup – single choice)"
+ },
+ {
+  "no": 102,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Program Tab Setup",
+  "text": "(If 'No' option is selected) Add 'Training Medium' (data available in 'Training Medium' setup – single choice)"
+ },
+ {
+  "no": 103,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Program Tab Setup",
+  "text": "(If 'No' option is selected) Add 'Training Tags / Labels' information (data available in 'Training Tags / Labels' setup – multiple choice)"
+ },
+ {
+  "no": 104,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Program Tab Setup",
+  "text": "(If 'No' option is selected) Add 'PDUs' text box"
+ },
+ {
+  "no": 105,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Program Tab Setup",
+  "text": "(If 'No' option is selected) Add organized by from drop-down option (data available in 'Vendor' setup)"
+ },
+ {
+  "no": 106,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Program Tab Setup",
+  "text": "Add 'Save & Next' option to go to the 'Trainer Tab Setup'"
+ },
+ {
+  "no": 107,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Trainer Tab Setup",
+  "text": "(If 'Yes' option is selected; this data will be pre-filled) Add 'Trainer Details' option. A search button for the ADMIN (HR) to search by name or EID"
+ },
+ {
+  "no": 108,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Trainer Tab Setup",
+  "text": "Add 'Topic Name' option beside 'Trainer Details'"
+ },
+ {
+  "no": 109,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Trainer Tab Setup",
+  "text": "Add 'Session Duration' beside 'Topic Name'"
+ },
+ {
+  "no": 110,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Trainer Tab Setup",
+  "text": "Add 'Add More' button to add more than one detail"
+ },
+ {
+  "no": 111,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Trainer Tab Setup",
+  "text": "Add 'Remove' option beside each trainer for ADMIN (HR) in case the trainer is to be removed"
+ },
+ {
+  "no": 112,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Trainer Tab Setup",
+  "text": "Add 'Previous', 'Save & Next' options at the bottom of the page"
+ },
+ {
+  "no": 113,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Participants Tab Setup",
+  "text": "Add 'Select Participant' option. Participant details to be linked from employee database.\n- Individual EID / name entry\n- Bulk upload option\n- (If participant list comes through nomination; this data will be pre-filled. Still, ADMIN (HR) can add more)"
+ },
+ {
+  "no": 114,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Participants Tab Setup",
+  "text": "Add a 'Participants Summary' tab to view all the participant details\n- Add 'i' option for the participants with calendar conflict / leave / resignation / retirement issue\n- Add 'Remove' option beside each participant for ADMIN (HR) in case the participant is to be removed"
+ },
+ {
+  "no": 115,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Participants Tab Setup",
+  "text": "Add 'Save List & Next' option to the 'Notification Tab' setup"
+ },
+ {
+  "no": 116,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Notification Tab Setup",
+  "text": "Add 'Organizer communication' section\n- Add 'Send Nomination to Organizer Now' option with customizable email template"
+ },
+ {
+  "no": 117,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Notification Tab Setup",
+  "text": "Add 'Trainer communication' section\n- Add 'Set Reminder Mail' option with date picker\n- Add 'Save & Send Invitation to Trainer(s) Now' option with customizable email template"
+ },
+ {
+  "no": 118,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Notification Tab Setup",
+  "text": "Add 'Participant communication' section\n- Add 'Set Reminder Mail' option with date picker\n- Add 'Send Training Invitation Now' option with send email communication to the participants\n- Respective supervisors to be CCed automatically whereas more recipient can be added by the ADMIN (HR)\n- Participant list (PDF format) to be attached in the email\n- Customizable mail template will also contain a redirect link to reject the invitation by the participant"
+ },
+ {
+  "no": 119,
+  "category": "Training Management System",
+  "sub": "",
+  "subsub": "",
+  "text": "Training Invitation Withdrawal Process\n- Employee clicks on the redirect link. It takes him to his dashboard and in this particular training invitation\n- Add 'Accept' and 'Withdrawn Request' option\n- If training is rejected by the employee, add a mandatory pop-up dialogue box for employee to write the reason behind rejection\n- Once rejected by the employee, an email to be sent automatically to the concern supervisor with a redirect link to approve / reject the request\n- Supervisor will click the link, get a window summarizing all the active requests by the employees and approve / reject the request as per 'Supervisor' or 'Division Head / Learning Champion' role\n- Add 'Approve Withdrawal', 'Approve Withdrawal with Replacement' and 'Reject' options beside each request\n- If 'Approve Withdrawal' is clicked, add a mandatory pop-up dialogue box for supervisor to write the reason behind withdrawing the employee from this training\n- If 'Approve Withdrawal with Replacement' is clicked, add option 'Add Replacement' as per 'Supervisor' or 'Division Head / Learning Champion' role. Supervisor will get notification on nominees' calendar conflict / leave / resignation / retirement during nomination\n- ADMIN (HR) will receive the withdrawal / replacement request in dashboard and can approve or reject the request\n- Inclusion / exclusion email to be sent to added / deleted participant with CC to respective Supervisor once ADMIN (HR) processes the request"
+ },
+ {
+  "no": 120,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Notification Tab Setup",
+  "text": "Add 'SMS and Whatsapp Notification' section"
+ },
+ {
+  "no": 121,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Notification Tab Setup",
+  "text": "Add 'Next' option to go to 'Feedback Tab' setup"
+ },
+ {
+  "no": 122,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Feedback Tab Setup",
+  "text": "Add 'Want to take feedback of this training?' option"
+ },
+ {
+  "no": 123,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Feedback Tab Setup",
+  "text": "Add drop-down with 'Yes' and 'No' options"
+ },
+ {
+  "no": 124,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Feedback Tab Setup",
+  "text": "If 'Yes' is selected, add 'Load Feedback Templates' options with drop-down. Feedback templates are available in 'Feedback Module' (details of the Feedback Module has been outlined later)"
+ },
+ {
+  "no": 125,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Feedback Tab Setup",
+  "text": "Add 'Save' option"
+ },
+ {
+  "no": 126,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Undertaking to Training Tab Setup",
+  "text": "Add 'Training Bond' button"
+ },
+ {
+  "no": 127,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Undertaking to Training Tab Setup",
+  "text": "Once clicked, a pop-up window with 'New Training Bond Setup' will open"
+ },
+ {
+  "no": 128,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Undertaking to Training Tab Setup",
+  "text": "'Bond Signing Date', 'Bond Period', 'Bond Period in Word', 'Bond Start Date', 'Bond Amount', 'Bond Amount in Word' – fields to be input by ADMIN (HR). Other fields of the setup will automatically be pulled from information available in 'Program Tab' and Employee Database"
+ },
+ {
+  "no": 129,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Undertaking to Training Tab Setup",
+  "text": "Add 'Save in Training Bond Database & Print' (data is saved in Training bond database)"
+ },
+ {
+  "no": 130,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Undertaking to Training Tab Setup",
+  "text": "A training bond template is needed and to be printed in single sided Legal Page setup. Some fields to be added from Employee Database (to be shared later)."
+ },
+ {
+  "no": 131,
+  "category": "Training Management System",
+  "sub": "Training Scheduling",
+  "subsub": "Undertaking to Training Tab Setup",
+  "text": "Add 'Save & Exit' option to close Training Scheduling Module."
+ },
+ {
+  "no": 132,
+  "category": "Training Management System",
+  "sub": "Planned Training Module and Attendance Management",
+  "subsub": "",
+  "text": "ADMIN (HR) will get a window with summary of his/ her scheduled training. Add information like 'Training Name', 'Venue', 'From Date', 'To Date', 'Organized By' etc."
+ },
+ {
+  "no": 133,
+  "category": "Training Management System",
+  "sub": "Planned Training Module and Attendance Management",
+  "subsub": "",
+  "text": "Add 'View and Edit' button beside each training summary"
+ },
+ {
+  "no": 134,
+  "category": "Training Management System",
+  "sub": "Planned Training Module and Attendance Management",
+  "subsub": "",
+  "text": "Add tab 'Training Details' summarizing all the information input for this training in 'Training Scheduling' module."
+ },
+ {
+  "no": 135,
+  "category": "Training Management System",
+  "sub": "Planned Training Module and Attendance Management",
+  "subsub": "",
+  "text": "Add 'Approval no.', 'Budget approved', 'Payment no.' and 'Actual expense' text boxes. These fields are mandatory (if there is no associated budget / expense with the training, 000 can be input). Also, an uploader and storage system to upload this training related approvals and other documents."
+ },
+ {
+  "no": 136,
+  "category": "Training Management System",
+  "sub": "Planned Training Module and Attendance Management",
+  "subsub": "",
+  "text": "Add 'Reschedule', 'Delete', 'Postpone' and 'Save' button. If rescheduled / deleted / postponed, customizable email to be sent to participants with cc to their line managers. Need email templates for that."
+ },
+ {
+  "no": 137,
+  "category": "Training Management System",
+  "sub": "Planned Training Module and Attendance Management",
+  "subsub": "",
+  "text": "Add tab 'Attendance' with the list of participants. 'Employee ID', 'Employee Name', 'Designation', 'Division / Department' etc. information is to be displayed in tabular form. All these details are available from 'Training Scheduling' module"
+ },
+ {
+  "no": 138,
+  "category": "Training Management System",
+  "sub": "Planned Training Module and Attendance Management",
+  "subsub": "",
+  "text": "Add 'Attendance Status' column. If the participant marks attendance by him / herself, the status will be shown here"
+ },
+ {
+  "no": 139,
+  "category": "Training Management System",
+  "sub": "Planned Training Module and Attendance Management",
+  "subsub": "",
+  "text": "Add 'Mark Attendance' column to the right with tick-box option to mark attendance"
+ },
+ {
+  "no": 140,
+  "category": "Training Management System",
+  "sub": "Planned Training Module and Attendance Management",
+  "subsub": "",
+  "text": "Add 'Mark All'. Single row entry can be unchecked as well"
+ },
+ {
+  "no": 141,
+  "category": "Training Management System",
+  "sub": "Planned Training Module and Attendance Management",
+  "subsub": "",
+  "text": "Add 'Add Participant' button at the bottom of the list. 'Employee ID' will be input by ADMIN (HR). Other employee information will come automatically from Employee Database"
+ },
+ {
+  "no": 142,
+  "category": "Training Management System",
+  "sub": "Planned Training Module and Attendance Management",
+  "subsub": "",
+  "text": "Add 'Submit & Update Training Database' button. Subsequent entry in the training database will be done automatically. Also, training investment and cost-per employee will be calculated automatically and reflect in related dashboards and employee profile."
+ },
+ {
+  "no": 143,
+  "category": "Training Management System",
+  "sub": "Planned Training Module and Attendance Management",
+  "subsub": "",
+  "text": "For online training, employees will login to the training platform (MS Teams / Zoom / Others) through LMS or the session will be hosted in the LMS through necessary API integration. Attendance will be marked automatically as the system has the ability to track the employee ID through login details. Any employee details (in addition to the scheduled participants) will be available through request mode to admin. If approved, their attendance will be marked."
+ },
+ {
+  "no": 144,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "Employee ID (input by ADMIN (HR))"
+ },
+ {
+  "no": 145,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "Name (data auto pull from Employee Database)"
+ },
+ {
+  "no": 146,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "Grade (data auto pull from Employee Database)"
+ },
+ {
+  "no": 147,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "Designation (data auto pull from Employee Database)"
+ },
+ {
+  "no": 148,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "Division (data auto pull from Employee Database)"
+ },
+ {
+  "no": 149,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "Location (data auto pull from Employee Database)"
+ },
+ {
+  "no": 150,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "Training / Course Title (drop-down list; data available in 'Training Title' setup)"
+ },
+ {
+  "no": 151,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "'Training Category', 'Training Mode', 'Training Medium' and 'Training Tags / Labels' information (data auto pull from 'Training Title' setup)"
+ },
+ {
+  "no": 152,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "Institute (drop-down list; data available in 'Vendor' setup)"
+ },
+ {
+  "no": 153,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "Training / Course Duration (auto from training module) [from – to date format and no. of days]"
+ },
+ {
+  "no": 154,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "Man-hour (input by ADMIN (HR))"
+ },
+ {
+  "no": 155,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "Bond signing date (input by ADMIN (HR))"
+ },
+ {
+  "no": 156,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "Bond Period (input by ADMIN (HR))"
+ },
+ {
+  "no": 157,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "Bond Period in Word (input by ADMIN (HR))"
+ },
+ {
+  "no": 158,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "Bond Start Date (date picker)"
+ },
+ {
+  "no": 159,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "Bond End Date (calculated from the bond start date and bond period)"
+ },
+ {
+  "no": 160,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "Bond Amount (input by ADMIN (HR))"
+ },
+ {
+  "no": 161,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "Bond Amount in Word (input by ADMIN (HR))"
+ },
+ {
+  "no": 162,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "Add 'Print Training Bond' option. A training bond template is needed and to be printed in single sided Legal Page setup. Some fields to be added from Employee Database (to be shared later)."
+ },
+ {
+  "no": 163,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "New Training Bond Setup",
+  "text": "Add 'Input in Training Database & Exit', 'Save & Exit'"
+ },
+ {
+  "no": 164,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "Training Bond Database",
+  "text": "Summary of all the training bonds"
+ },
+ {
+  "no": 165,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "Training Bond Database",
+  "text": "Information can be edited and saved by ADMIN (HR)"
+ },
+ {
+  "no": 166,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "Training Bond Database",
+  "text": "Calculation of 'Remaining Liability'"
+ },
+ {
+  "no": 167,
+  "category": "Training Management System",
+  "sub": "Undertaking to Training",
+  "subsub": "Training Bond Database",
+  "text": "Training bond database can be updated either by direct entry from 'New Training Bond Setup' or entry done during 'Training Scheduling'."
+ },
+ {
+  "no": 168,
+  "category": "Training Management System",
+  "sub": "Summary of the Planned / Executed Training",
+  "subsub": "",
+  "text": "This is a dashboard for each ADMIN (HR) / L&D team to have a glimpse of the training performance during a specific period of time. Based on some reporting criteria, this dashboard will provide live data to the L&D team."
+ },
+ {
+  "no": 169,
+  "category": "Training Management System",
+  "sub": "Add Records to Training Database",
+  "subsub": "",
+  "text": "Existing database to be uploaded / migrated to the system. Need uploader template and uploader system for that (access for Admin only)"
+ },
+ {
+  "no": 170,
+  "category": "Training Management System",
+  "sub": "Add Records to Training Database",
+  "subsub": "",
+  "text": "Marked attendance from the scheduled training to be automatically updated in the training database"
+ },
+ {
+  "no": 171,
+  "category": "Training Management System",
+  "sub": "Add Records to Training Database",
+  "subsub": "",
+  "text": "Direct entry in 'New Training Bond Setup' under training bond module to be automatically updated in the training database"
+ },
+ {
+  "no": 172,
+  "category": "Training Management System",
+  "sub": "Add Records to Training Database",
+  "subsub": "",
+  "text": "Direct entry (single) + bulk new training information entry. Need uploader and template for that (access for Admin only). Direct entry (single) can be accessed by employee as well where he / she can submit request to be further validated / approved by Admin for entry in Training Database."
+ },
+ {
+  "no": 173,
+  "category": "Training Management System",
+  "sub": "Training Database for External Trainees",
+  "subsub": "",
+  "text": "Existing database to be uploaded / migrated to the system. Need uploader template and uploader system for that (access for Admin only)"
+ },
+ {
+  "no": 174,
+  "category": "Training Management System",
+  "sub": "Training Database for External Trainees",
+  "subsub": "",
+  "text": "Direct entry (single) + bulk new training information entry. Need uploader and template for that (access for Admin only)"
+ },
+ {
+  "no": 175,
+  "category": "Training Management System",
+  "sub": "Training Reports",
+  "subsub": "",
+  "text": "Employee-wise training report"
+ },
+ {
+  "no": 176,
+  "category": "Training Management System",
+  "sub": "Training Reports",
+  "subsub": "",
+  "text": "Division / Department / Function-wise training report"
+ },
+ {
+  "no": 177,
+  "category": "Training Management System",
+  "sub": "Training Reports",
+  "subsub": "",
+  "text": "Tag / label-wise training report (single and multiple tag / label)"
+ },
+ {
+  "no": 178,
+  "category": "Training Management System",
+  "sub": "Training Reports",
+  "subsub": "",
+  "text": "Period-wise training report"
+ },
+ {
+  "no": 179,
+  "category": "Training Management System",
+  "sub": "Training Reports",
+  "subsub": "",
+  "text": "Gender-wise training report"
+ },
+ {
+  "no": 180,
+  "category": "Training Management System",
+  "sub": "Training Reports",
+  "subsub": "",
+  "text": "Group-wise training report"
+ },
+ {
+  "no": 181,
+  "category": "Training Management System",
+  "sub": "Training Reports",
+  "subsub": "",
+  "text": "Report on training feedback"
+ },
+ {
+  "no": 182,
+  "category": "Training Management System",
+  "sub": "Training Reports",
+  "subsub": "",
+  "text": "Training Calendar"
+ },
+ {
+  "no": 183,
+  "category": "Training Management System",
+  "sub": "Training Reports",
+  "subsub": "",
+  "text": "Report in combination of multiple criteria"
+ },
+ {
+  "no": 184,
+  "category": "Training Management System",
+  "sub": "Training Reports",
+  "subsub": "",
+  "text": "Scheduled report (templet-wise) auto sending to relevant stakeholders"
+ },
+ {
+  "no": 185,
+  "category": "Training Management System",
+  "sub": "Training Reports",
+  "subsub": "",
+  "text": "AI integration to suggest training to employees considering skill-gap, role-requirement, mandatory courses for that role (adjusted automatically with the change of role) etc."
+ },
+ {
+  "no": 186,
+  "category": "Training Management System",
+  "sub": "Training Needs Assessment",
+  "subsub": "",
+  "text": "Submission of divisional training requirement"
+ },
+ {
+  "no": 187,
+  "category": "Training Management System",
+  "sub": "Training Needs Assessment",
+  "subsub": "",
+  "text": "Regular program wise TNA can be done through nomination / survey module (outlined later)"
+ },
+ {
+  "no": 188,
+  "category": "Training Management System",
+  "sub": "Training Needs Assessment",
+  "subsub": "",
+  "text": "Individual Development plan submission"
+ },
+ {
+  "no": 189,
+  "category": "Training Management System",
+  "sub": "Training Needs Assessment",
+  "subsub": "",
+  "text": "Time-to-time changes in the TNA module / process may happen; thereby the changes in module / new development may be required"
+ },
+ {
+  "no": 190,
+  "category": "e-Learning Module",
+  "sub": "Course Creation",
+  "subsub": "",
+  "text": "Configuration: course title, course code, short description, detailed description, learning objectives, difficulty level, estimated duration, mandatory status (all employee / role / division / department / function etc.) tags, keywords, version number, expiry date, course thumbnail (image / video), module-wise thumbnail (image / video), sub-title management (English and bangla)"
+ },
+ {
+  "no": 191,
+  "category": "e-Learning Module",
+  "sub": "Course Creation",
+  "subsub": "",
+  "text": "Basic course structure: organize course -> module (section) -> lesson (activity) -> feedback -> assessment -> certification"
+ },
+ {
+  "no": 192,
+  "category": "e-Learning Module",
+  "sub": "Course Creation",
+  "subsub": "",
+  "text": "Learning rules: sequential learning, conditional access to next content (mandatory completion), completion criteria, minimum score, pass mark, time limit, course expiry, auto re-enrollment, refresher interval etc."
+ },
+ {
+  "no": 193,
+  "category": "e-Learning Module",
+  "sub": "Course Creation",
+  "subsub": "",
+  "text": "Content type: video, SCORM package, zip, youtube video, streaming link, PDF, .doc, PPT, excel, image with protection options (preview only / download allowed / print allowed / water mark etc.) as well as interactive contents HTML5, H5P, image comparison, bangla language content / UI support, closed caption / subtitles for videos etc. Offline and low-bandwith playback support is also needed. etc."
+ },
+ {
+  "no": 194,
+  "category": "e-Learning Module",
+  "sub": "Course Creation",
+  "subsub": "",
+  "text": "Content support: drag & drop, uploader, reordering etc."
+ },
+ {
+  "no": 195,
+  "category": "e-Learning Module",
+  "sub": "Course Creation",
+  "subsub": "",
+  "text": "Content control: playback speed, allow / disallow speed control, allow / disallow skipping, prevent forward seeking, resume from last watch position, picture-in-picture, full screen, tracking mechanism: watch percentage, page scrolled, time spent, interoperable learning-activity tracking (xAPI/cmi5) etc."
+ },
+ {
+  "no": 196,
+  "category": "e-Learning Module",
+  "sub": "Course Creation",
+  "subsub": "",
+  "text": "Assessment: embedded assessment – before activity, during activity, end of activity and after a certain pre-defined time (details of the assessment functionalities is discussed in the Assessment / Exam Module)"
+ },
+ {
+  "no": 197,
+  "category": "e-Learning Module",
+  "sub": "Course Creation",
+  "subsub": "",
+  "text": "Feedback: activity-level feedback, course-level feedback (details of the feedback functionalities is discussed in the Feedback Module), overall course rating etc."
+ },
+ {
+  "no": 198,
+  "category": "e-Learning Module",
+  "sub": "Course Administration",
+  "subsub": "",
+  "text": "Certification: configurable by admin, multiple templets can be created, digital signature, auto-generated upon course completion / criteria completion, QR code verification, download (image, pdf), share (email, social media platforms)"
+ },
+ {
+  "no": 199,
+  "category": "e-Learning Module",
+  "sub": "Course Administration",
+  "subsub": "",
+  "text": "Learning path: category assign, sequence to multiple courses, pre-requisites, role-based learning, mandatory learning etc."
+ },
+ {
+  "no": 200,
+  "category": "e-Learning Module",
+  "sub": "Course Administration",
+  "subsub": "",
+  "text": "Enrollment: individual enrollment, bulk upload (excel-based, excel cells drag & drop), role-wise admin enrollment, grade / role / branch / division / department / location-wise enrollment, enrollment request by trainee, create batch and scheduling with criteria during enrollment, external learner profile creation (individual / bulk) etc."
+ },
+ {
+  "no": 201,
+  "category": "e-Learning Module",
+  "sub": "Course Administration",
+  "subsub": "",
+  "text": "Notification & communication: Configurable reminder frequency, automated enrollment notifications with customized email, course due and overdue reminders (web, in-app and email) to trainee, manager alerts for team progress / overdue course and assessment, feedback request reminders, automated certificate to trainee's designated email, announcement center, email / SMS / push notification / whatsapp integration support etc."
+ },
+ {
+  "no": 202,
+  "category": "e-Learning Module",
+  "sub": "Course Administration",
+  "subsub": "",
+  "text": "Version control: with or without uploading new course / content assigning to trainees as fresh course; with previous data backup, archive and restore functionality"
+ },
+ {
+  "no": 203,
+  "category": "e-Learning Module",
+  "sub": "Course Administration",
+  "subsub": "",
+  "text": "Search: global search, filter by division / department / office / region / difficulty / popularity / grade / designation etc."
+ },
+ {
+  "no": 204,
+  "category": "e-Learning Module",
+  "sub": "Course Administration",
+  "subsub": "",
+  "text": "Direct access to course from the shared link after logging in."
+ },
+ {
+  "no": 205,
+  "category": "e-Learning Module",
+  "sub": "Dashboards",
+  "subsub": "",
+  "text": "Trainee dashboard: course-wise completion status, last viewed course, bookmarks, downloads, discussion forum, learning goal / KPI & progress, upcoming exam, latest exam results, leaderboard for the completed exams, certificates, upcoming schedules (exam, training, course etc.), calendar view of the assigned tasks, course enrolled – completed / upcoming – hours, exam enrolled - completed / pending, progress bar, points / badges / star / rewards etc."
+ },
+ {
+  "no": 206,
+  "category": "e-Learning Module",
+  "sub": "Dashboards",
+  "subsub": "",
+  "text": "Manager dashboard: all as the trainee and learning goal / KPI & progress of the reportees, Absent / course non-completion report of the reportees etc."
+ },
+ {
+  "no": 207,
+  "category": "e-Learning Module",
+  "sub": "Dashboards",
+  "subsub": "",
+  "text": "Reports: course-wise completion and assessment result, year & course-wise completion and assessment results, year & branch-wise reports, trainee's individual training report, branch / division / department-wise report, topic-wise report, tag-wise report, gender-wise report, training / course category-wise report, medium-wise report etc."
+ },
+ {
+  "no": 208,
+  "category": "e-Learning Module",
+  "sub": "Dashboards",
+  "subsub": "",
+  "text": "Separate dashboards and analytics for trainings, e-learning, exam, feedback etc."
+ },
+ {
+  "no": 209,
+  "category": "e-Learning Module",
+  "sub": "Dashboards",
+  "subsub": "",
+  "text": "Integration of AI tools to identify employees at risk of missing mandatory compliance deadlines, or forecasting division-level skill gaps before they become a performance problem"
+ },
+ {
+  "no": 210,
+  "category": "Assessment / Exam Module",
+  "sub": "",
+  "subsub": "",
+  "text": "Direct access to exam from the shared link after logging in."
+ },
+ {
+  "no": 211,
+  "category": "Assessment / Exam Module",
+  "sub": "",
+  "subsub": "",
+  "text": "Question type: MCQ, true/false, fill in blank, short answer (bound by character number), essay, case study, Image MCQ / case study, matching, drag & drop etc."
+ },
+ {
+  "no": 212,
+  "category": "Assessment / Exam Module",
+  "sub": "",
+  "subsub": "",
+  "text": "Exam Configuration: Exam title, instructions, reading material attachment, passing score, mark for each question setting, negative marking, question randomization, option shuffle within question, question bank upload, time limit, attempt limit, exam availability, exam proctoring (webcam, face verification against EID photo, window / browser restriction, tab switch detection, copy-paste restriction, gaze count etc.), auto submit upon time limit exceeds, grace time, no of questions in display, pop-up message when a participant leaves / submits exam without answering all the questions, individual enrollment, bulk upload (excel-based, excel cells drag & drop), role-wise admin enrollment, grade / role / branch / division / department / location-wise enrollment etc."
+ },
+ {
+  "no": 213,
+  "category": "Assessment / Exam Module",
+  "sub": "",
+  "subsub": "",
+  "text": "Exam evaluation: automatic (MCQ, Fill in the blanks, true/false), manual and AI assistance (for descriptive answers), trainer assignment (for descriptive questions – both question wise and exam wise), plagiarism detection etc."
+ },
+ {
+  "no": 214,
+  "category": "Assessment / Exam Module",
+  "sub": "",
+  "subsub": "",
+  "text": "Result setting: Instant / scheduled, with whole questions, with / without correct answer, Score / percentage display, Grade setting (Excellent, Very Good etc.) etc."
+ },
+ {
+  "no": 215,
+  "category": "Assessment / Exam Module",
+  "sub": "",
+  "subsub": "",
+  "text": "Question pull: from questions uploaded under specific exam, from one / multiple question bank, difficulty level wise etc."
+ },
+ {
+  "no": 216,
+  "category": "Assessment / Exam Module",
+  "sub": "",
+  "subsub": "",
+  "text": "Question Bank: topic-wise (folders), question category (mandatory to pull or not), difficulty level, tags, single / bulk upload (excel), bulk download (topic / category / question bank-wise), duplicate detection, random question generation, question expiry, count of type-wise question under question bank, multiple exams using same question banks / topics etc."
+ },
+ {
+  "no": 217,
+  "category": "Assessment / Exam Module",
+  "sub": "",
+  "subsub": "",
+  "text": "Dashboard: exam tagging with scheduled training, participation rate, pending participation, edit exam, exam summary (nos enrolled, nos participated), graphical presentation of different reports / results, participants can download individual exam wise excel report, exam results / participation status of reportees in the manager's dashboard etc."
+ },
+ {
+  "no": 218,
+  "category": "Assessment / Exam Module",
+  "sub": "",
+  "subsub": "",
+  "text": "Notification & communication: Configurable reminder frequency, automated enrollment notifications with customized email, exam due and overdue reminders (web, in-app and email) to trainee, manager alerts for team progress / overdue exam, feedback request reminders, email / SMS / push notification / whatsapp integration support etc"
+ },
+ {
+  "no": 219,
+  "category": "Assessment / Exam Module",
+  "sub": "",
+  "subsub": "",
+  "text": "'Star Icon' for top scorer, Gallery option to show top exam performer's pictures and details."
+ },
+ {
+  "no": 220,
+  "category": "Assessment / Exam Module",
+  "sub": "",
+  "subsub": "",
+  "text": "If there are multiple exams in a same month for a team/individual, average marks/highest mark will be fetched and it will depend on admin's decision / quiz setting."
+ },
+ {
+  "no": 221,
+  "category": "Feedback / Survey Module",
+  "sub": "",
+  "subsub": "",
+  "text": "Direct access to feedback / survey from the shared link after logging in."
+ },
+ {
+  "no": 222,
+  "category": "Feedback / Survey Module",
+  "sub": "",
+  "subsub": "",
+  "text": "Feedback types & configuration: stand-alone or attached to training / course / exam, training needs assessment, manager feedback, post training feedback components: content feedback, trainer feedback (for single / multiple trainer), logistics feedback, add templet, add category, add management level, add question, question type, calculation and evaluation etc."
+ },
+ {
+  "no": 223,
+  "category": "Feedback / Survey Module",
+  "sub": "",
+  "subsub": "",
+  "text": "Question types: Likert scale, star rating, drop-down, open text box etc."
+ },
+ {
+  "no": 224,
+  "category": "Feedback / Survey Module",
+  "sub": "",
+  "subsub": "",
+  "text": "Notification & communication: email / sms / whatsapp / push notification (web / app), link / QR code"
+ },
+ {
+  "no": 225,
+  "category": "Feedback / Survey Module",
+  "sub": "",
+  "subsub": "",
+  "text": "Analysis: data export in excel, trainer comparison, comparison with other feedback, trend chart, pie chart etc."
+ },
+ {
+  "no": 226,
+  "category": "Feedback / Survey Module",
+  "sub": "",
+  "subsub": "",
+  "text": "AI-driven sentiment analysis, theme extraction, flagging the recurring issues through feedback etc."
+ },
+ {
+  "no": 227,
+  "category": "Knowledge Corner (Virtual)",
+  "sub": "",
+  "subsub": "",
+  "text": "File type: Image, audio, video, pdf, ppt, excel, doc etc. with protection options (preview only / download allowed / print allowed / water mark etc.)"
+ },
+ {
+  "no": 228,
+  "category": "Knowledge Corner (Virtual)",
+  "sub": "",
+  "subsub": "",
+  "text": "Content support: folder creation – multiple files under same folder, multiple folders under master folder, functionalities - drag & drop, uploader, reordering etc."
+ },
+ {
+  "no": 229,
+  "category": "Knowledge Corner (Virtual)",
+  "sub": "",
+  "subsub": "",
+  "text": "Administration and Search: privacy control, bulk upload, content / topic tags, bookmark / favourites management, sharing content (through Employee ID, email), content link generation for sharing, content tagging with course / exam reading material section, global search, filter by topic / tag etc."
+ },
+ {
+  "no": 230,
+  "category": "Library Management (Physical books)",
+  "sub": "Book Entry",
+  "subsub": "",
+  "text": "Add text boxes: 'Book Name', 'Author', 'Publishers', 'Year of Publishing', 'Year of Purchase', 'Category', 'Quantity', 'tag' etc."
+ },
+ {
+  "no": 231,
+  "category": "Library Management (Physical books)",
+  "sub": "Book Entry",
+  "subsub": "",
+  "text": "Assign system generated unique number to the books"
+ },
+ {
+  "no": 232,
+  "category": "Library Management (Physical books)",
+  "sub": "Book Entry",
+  "subsub": "",
+  "text": "Add individual entry and Bulk Upload option (templet needed)"
+ },
+ {
+  "no": 233,
+  "category": "Library Management (Physical books)",
+  "sub": "Assign Book",
+  "subsub": "",
+  "text": "Add 'Search' button. Books can be searched with name, author, publisher, tag etc. information."
+ },
+ {
+  "no": 234,
+  "category": "Library Management (Physical books)",
+  "sub": "Assign Book",
+  "subsub": "",
+  "text": "Status of the book; i.e. available or not available will be shown"
+ },
+ {
+  "no": 235,
+  "category": "Library Management (Physical books)",
+  "sub": "Assign Book",
+  "subsub": "",
+  "text": "Add 'Assign to employee' button. Employee information can be searched through EID, name etc."
+ },
+ {
+  "no": 236,
+  "category": "Library Management (Physical books)",
+  "sub": "Assign Book",
+  "subsub": "",
+  "text": "Add 'Return date' box. Date can be picked up through calendar / date picker."
+ },
+ {
+  "no": 237,
+  "category": "Library Management (Physical books)",
+  "sub": "Assign Book",
+  "subsub": "",
+  "text": "Add 'Submit' button"
+ },
+ {
+  "no": 238,
+  "category": "Library Management (Physical books)",
+  "sub": "Assign Book",
+  "subsub": "",
+  "text": "There will be 'Employee' facing end of this module. They can request book through this module. Search option, availability status and request button will be available to them. HR Admin will approve (with return date) or reject the request."
+ },
+ {
+  "no": 239,
+  "category": "Library Management (Physical books)",
+  "sub": "Reports",
+  "subsub": "",
+  "text": "Add filter to get customized report. Filter can be done through category, author, tag etc."
+ },
+ {
+  "no": 240,
+  "category": "Library Management (Physical books)",
+  "sub": "Reports",
+  "subsub": "",
+  "text": "Other reports; e.g. assigned books, overdue return etc."
+ },
+ {
+  "no": 241,
+  "category": "Competency & Learning Journey Management Module",
+  "sub": "",
+  "subsub": "",
+  "text": "Framework setup: add framework, framework name, description, project duration (start and end date), status (active / inactive – restore)"
+ },
+ {
+  "no": 242,
+  "category": "Competency & Learning Journey Management Module",
+  "sub": "",
+  "subsub": "",
+  "text": "Competency assessment: category setup (management level), competency setup, employee assignment, tagging with feedback / survey module, calculation, evaluation criteria assignment, competency level assessment"
+ },
+ {
+  "no": 243,
+  "category": "Competency & Learning Journey Management Module",
+  "sub": "",
+  "subsub": "",
+  "text": "Learning journey: training / course assignment with competency level, progress report (admin level, manager level, trainee level)"
+ },
+ {
+  "no": 244,
+  "category": "Integration & API",
+  "sub": "",
+  "subsub": "",
+  "text": "With HR-IS, leave portal, customer service portal, attendance system, meeting room booking system, different performance tracking module, MS Teams / Zoom, Outlook (mail and calendar), SMS gateway, Whatsapp, Power BI for reporting & analytics, other tools / platforms as required"
+ },
+ {
+  "no": 245,
+  "category": "Integration & API",
+  "sub": "",
+  "subsub": "",
+  "text": "AI chatbot / virtual learning assistant"
+ },
+ {
+  "no": 246,
+  "category": "Integration & API",
+  "sub": "",
+  "subsub": "",
+  "text": "The whole system will be available in web version (both intra-net and internet) as well as mobile app (android and IOS)"
+ },
+ {
+  "no": 247,
+  "category": "Intra-Module Integration",
+  "sub": "",
+  "subsub": "",
+  "text": "The modules mentioned in the above should be workable both independently and connected to other specific module. For example: stand-alone exam can be designed as well as the created exams can be linked with e-learning / online / physical trainings scheduled in prior modules."
+ },
+ {
+  "no": 248,
+  "category": "Security & Governance",
+  "sub": "",
+  "subsub": "",
+  "text": "Any further technical requirements (addition / modification) will be managed by IT Division"
+ },
+ {
+  "no": 249,
+  "category": "Security & Governance",
+  "sub": "",
+  "subsub": "",
+  "text": "As per standard and security protocol of City Bank; to be suggested by IT Division"
+ },
+ {
+  "no": 250,
+  "category": "Security & Governance",
+  "sub": "",
+  "subsub": "",
+  "text": "The whole system should be compatible with agile / modular design principles."
+ }
+]

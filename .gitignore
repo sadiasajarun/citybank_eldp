@@ -1,0 +1,25 @@
+# dependencies and build output
+node_modules/
+dist/
+*.tsbuildinfo
+
+# archives
+*.zip
+
+# local environment and secrets
+.env
+.env.*
+!.env.example
+
+# local tool settings
+.claude/settings.json
+.claude/settings.local.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# credential files (never commit)
+**/*.pem
+**/*.key
+**/credentials*.json
