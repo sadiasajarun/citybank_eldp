@@ -81,7 +81,7 @@ export function DivisionHome() {
   const maxLevel = Math.max(1, ...a.levels);
 
   return (
-    <div className="mx-auto max-w-[1440px] px-8 pb-12">
+    <div>
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-[40px] font-semibold leading-[1.1] tracking-tight">{greeting()}, Farzana</h1>

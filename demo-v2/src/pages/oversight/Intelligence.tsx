@@ -246,7 +246,7 @@ export function Intelligence() {
   );
 
   return (
-    <div className="mx-auto max-w-[1480px] px-8 py-8">
+    <div>
       {/* header */}
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>

@@ -32,7 +32,7 @@ const NAV: { label: string; to: string | 'role'; match: (p: string, role: Role) 
 
 /** Work pages shown on white, so the form fills the screen. */
 const WHITE = ['/division', '/tna'];
-const FULL_BLEED = ['/overview', '/workflow', '/platform', '/executive'];
+const FULL_BLEED = ['/workflow', '/platform'];
 /** Hub pages hide the guidance note on an exact match only (sub-pages always show it). */
 /** Steps whose page opens its own action form when the step bar's button is pressed. */
 const STEP_ACTIONS = new Set(['Withdrawal requested']);
@@ -260,7 +260,7 @@ export default function Shell() {
       <div className="flex min-h-0 flex-1">
         {showMenu && <WorkMenu collapsed={menuCollapsed} onToggle={toggleMenu} />}
         <main ref={mainRef} className={cx('relative min-h-0 flex-1 overflow-y-auto scroll-thin', WHITE.some((p) => path.startsWith(p)) && 'bg-white')}>
-          <div className={cx(FULL_BLEED.some((p) => path.startsWith(p)) ? 'px-8' : 'mx-auto max-w-[1440px] px-10', 'pt-8')}>
+          <div className={cx(FULL_BLEED.some((p) => path.startsWith(p)) ? 'px-10' : 'mx-auto max-w-[1440px] px-10', 'pt-8')}>
             {needsPrompt && owner && <RolePrompt owner={owner} />}
             <StopBanner switchRole={switchRole} />
             <RevisitBanner switchRole={switchRole} />
