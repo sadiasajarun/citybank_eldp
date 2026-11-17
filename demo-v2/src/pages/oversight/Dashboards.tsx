@@ -18,6 +18,8 @@ import { DivisionHome } from './DivisionHome';
 import { TrainerSessions } from '../decisions/Trainer';
 import { HrOperations as HrOpsHome } from './HrOps';
 import { MyLearning } from '../employee/MyLearning';
+import { FinanceInsight, ManagementInsight, SupervisorInsight } from './RoleInsights';
+import { AdminOverview } from '../admin/Administration';
 import { FrRef, SourceTag } from '../../components/Source';
 import { DataTable, downloadCsv, type Column } from '../../components/DataTable';
 import { personaFor, useSwitchRole } from '../../components/perspective';
@@ -35,9 +37,9 @@ const ROLE_FR: Record<Role, string> = {
 /* ================================================================== */
 /* My work                                                             */
 /* ================================================================== */
-export function RoleHome() {
+export function RoleHome({ role: forced }: { role?: Role } = {}) {
   const { role = 'hr' } = useParams();
-  const r = (ROLE_ORDER.includes(role as Role) ? role : 'hr') as Role;
+  const r = forced ?? ((ROLE_ORDER.includes(role as Role) ? role : 'hr') as Role);
   const s = useDemo();
   const p = personaFor(r, s.employeeId);
   if (r === 'division_head') return <DivisionHome />;
@@ -183,6 +185,8 @@ function TeamBody() {
           </li>
         ))}
       </ul>
+
+      <SupervisorInsight />
 
       <div className="mt-5 grid gap-5 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
         <section className={cx(card, 'px-6 py-5')}>
@@ -419,6 +423,8 @@ function FinanceHome() {
   ];
   const waiting = rows.filter((r) => r.status === 'Awaiting approval').length;
   return (
+    <>
+    <FinanceInsight />
     <Section title="Budget pipeline" fr="Proposed · based on FR 135" action={<SourceTag kind="proposed">Proposed workflow, based on FR 135</SourceTag>}>
       <div className="mb-6">
         <Figures items={[
@@ -430,6 +436,7 @@ function FinanceHome() {
       </div>
       <DataTable rows={rows} columns={cols} rowKey={(r) => r.id} label="budgets" onRowClick={() => nav('/finance')} />
     </Section>
+    </>
   );
 }
 
@@ -445,6 +452,8 @@ function ManagementHome() {
   const enrolled = rows.filter((r) => r.course);
   const mand = pct(enrolled.filter((r) => r.course?.status === 'Completed').length, enrolled.length);
   return (
+    <>
+    <ManagementInsight />
     <Section title="Bank-wide summary" fr="FR 168, 208" action={<Btn onClick={() => nav('/executive')}>Open Executive Insight <ArrowRight size={16} /></Btn>}>
       <Figures items={[
         { label: 'Employees in the directory', value: DIRECTORY.length, sub: `${DIVISIONS.length} divisions` },
@@ -455,6 +464,7 @@ function ManagementHome() {
       ]} />
       {drill.panel}
     </Section>
+    </>
   );
 }
 
@@ -478,6 +488,8 @@ function AdminHome() {
   ];
   const extra = s.extraAttendees;
   return (
+    <>
+    <div className="mb-6"><AdminOverview /></div>
     <>
       {extra.length > 0 && (
         <Section title="Extra attendees" fr="FR 143">
@@ -505,6 +517,7 @@ function AdminHome() {
       <Section title="Access overview" fr="FR 21" action={<SourceTag kind="architecture" />}>
         <DataTable rows={access} columns={cols} rowKey={(a) => a.role} label="roles" onRowClick={() => nav('/admin/security')} />
       </Section>
+    </>
     </>
   );
 }

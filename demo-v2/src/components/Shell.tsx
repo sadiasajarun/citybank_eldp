@@ -15,6 +15,8 @@ import type { Role } from '../types';
 import { Avatar, cx, Drawer } from './ui';
 import { personaFor, useSwitchRole } from './perspective';
 import { FrRef, SourceTag } from './Source';
+import { useT } from '../i18n';
+import { LifecycleStrip } from './Dash';
 
 export { personaFor };
 
@@ -32,6 +34,9 @@ const NAV: { label: string; to: string | 'role'; match: (p: string, role: Role) 
 const WHITE = ['/division', '/tna'];
 const FULL_BLEED = ['/overview', '/workflow', '/platform', '/executive'];
 /** Hub pages hide the guidance note on an exact match only (sub-pages always show it). */
+/** Steps whose page opens its own action form when the step bar's button is pressed. */
+const STEP_ACTIONS = new Set(['Withdrawal requested']);
+const TMS_PAGES = ['/hr/requests', '/hr/nomination-request', '/hr/nomination-status', '/hr/schedule', '/hr/approvals', '/hr/attendance', '/hr/planned', '/hr/bonds', '/hr/training-db'];
 const NO_NOTE = ['/request/new', '/division', '/tna', '/overview', '/workflow', '/platform', '/coverage', '/reports', '/connected', '/people', '/learning', '/login'];
 
 /** Which role owns a page when the current role is not entitled to it. */
@@ -59,6 +64,7 @@ function useOutside(open: boolean, close: () => void) {
 
 export default function Shell() {
   const s = useDemo();
+  const t = useT();
   const nav = useNavigate();
   const loc = useLocation();
   const path = loc.pathname;
@@ -71,7 +77,7 @@ export default function Shell() {
   const [notifOpen, setNotifOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const [roleOpen, setRoleOpen] = useState(false);
-  const [handing, setHanding] = useState<string | null>(null);
+  const [handing, setHanding] = useState<{ name: string; next: string; cta: string; go: () => void; skip: string[] } | null>(null);
   const mainRef = useRef<HTMLElement>(null);
   const [menuCollapsed, setMenuCollapsed] = useState(() => { try { return localStorage.getItem('eldp-menu') === 'collapsed'; } catch { return false; } });
   const roleRef = useOutside(roleOpen, () => setRoleOpen(false));
@@ -109,29 +115,32 @@ export default function Shell() {
     return () => clearTimeout(t);
   }, [s.toast, s.undo]);
 
-  /* ---------- hand-off engine (F6.1): when the next step belongs to someone else, go there ---------- */
+  // the hand-off card belongs to the person who just acted
+  useEffect(() => { setHanding(null); }, [s.role, s.employeeId]);
+  /* ---------- hand-off (F6.1): when the next step belongs to someone else, offer it; never move on its own ---------- */
   const prevJi = useRef(ji);
   useEffect(() => {
     const before = prevJi.current;
     prevJi.current = ji;
-    if (ji <= before || ji >= JOURNEY.length) return;
+    if (ji <= before || ji >= JOURNEY.length) { setHanding(null); return; }
     const st = useDemo.getState();
     if (st.revisit !== null) return;
     const cur = JOURNEY[ji];
     const act = journeyAction(cur, st);
     const sameRole = act.role === st.role && (!act.emp || act.emp === st.employeeId || act.role !== 'employee');
-    if (sameRole) return;
+    if (sameRole) { setHanding(null); return; }
     const ev = st.audit[0];
     const name = cur.who === 'system' ? 'the system' : personaFor(act.role, act.emp ?? st.employeeId).name;
-    setHanding(name);
     const dash = st.handoffTarget === 'dashboard' ? ROLE_DASHBOARD[act.role] : undefined;
     const target = dash ?? act.to;
-    const go = () => {
-      setHanding(null);
-      useDemo.getState().setArrival({ path: target.split('?')[0], from: ev ? `${ev.actor}, ${ev.actorRole}` : '', text: ev ? (IMPACTS[ev.action]?.headline ?? ev.action) : cur.title, at: ev ? ev.at.slice(12) : '', key: ev?.action });
-      switchRole(act.role, target, act.emp);
-    };
-    if (reducedMotion()) go(); else setTimeout(go, 900);
+    setHanding({
+      name, next: cur.short, cta: act.cta, skip: journeyScreens(JOURNEY[before]),
+      go: () => {
+        setHanding(null);
+        useDemo.getState().setArrival({ path: target.split('?')[0], from: ev ? `${ev.actor}, ${ev.actorRole}` : '', text: ev ? (IMPACTS[ev.action]?.headline ?? ev.action) : cur.title, at: ev ? ev.at.slice(12) : '', key: ev?.action });
+        switchRole(act.role, target, act.emp);
+      },
+    });
   }, [ji]);
 
   const section = NAV.find((n) => n.match(path, s.role))?.label;
@@ -171,7 +180,7 @@ export default function Shell() {
               return (
                 <button key={n.label} onClick={() => nav(n.to === 'role' ? ROLE_HOME[s.role] : n.to)} aria-current={on ? 'page' : undefined}
                   className={cx('relative flex items-center gap-2 whitespace-nowrap px-3 text-[16px] font-semibold transition-colors 2xl:px-4', on ? 'text-ink' : 'text-ink-3 hover:text-ink')}>
-                  {n.label}
+                  {t(n.label)}
                   {count > 0 && <span className="rounded-full bg-brand px-2 text-[14px] font-bold leading-5 text-white">{count}</span>}
                   {on && <span className="absolute inset-x-4 bottom-0 h-[3px] rounded-full bg-brand" />}
                 </button>
@@ -179,6 +188,9 @@ export default function Shell() {
             })}
           </nav>
           <div className="ml-auto flex shrink-0 items-center gap-2">
+            <div className="flex items-center rounded-lg border border-line p-0.5 text-[14px] font-semibold" role="group" aria-label="Language">
+              {(['bn', 'en'] as const).map((l) => <button key={l} onClick={() => s.setLang(l)} aria-pressed={s.lang === l} className={cx('rounded-md px-2.5 py-1', s.lang === l ? 'bg-brand-soft text-brand' : 'text-ink-3 hover:text-ink')}>{l === 'bn' ? 'বাং' : 'EN'}</button>)}
+            </div>
             <button onClick={() => setPalette(true)} title="Search (Ctrl K)" aria-label="Search" className="grid h-11 w-11 place-items-center rounded-lg text-ink-2 hover:bg-canvas"><Search size={20} /></button>
             <div ref={moreRef} className="relative">
               <button onClick={() => setMoreOpen((v) => !v)} aria-label="More: workflows, platform, audit, settings" title="More" className="flex h-11 items-center gap-1.5 rounded-lg px-3 text-[15px] font-semibold text-ink-2 hover:bg-canvas"><MoreHorizontal size={20} /><span className="hidden 2xl:inline">More</span></button>
@@ -254,6 +266,7 @@ export default function Shell() {
             <RevisitBanner switchRole={switchRole} />
             <EarlyStepBanner switchRole={switchRole} />
             {!NO_NOTE.includes(path) && !s.revisit && <GuidedStepNote switchRole={switchRole} openImpact={setImpactKey} />}
+            {s.role === 'hr' && TMS_PAGES.some((p) => path.startsWith(p)) && <div className="mt-3"><LifecycleStrip /></div>}
           </div>
           <div key={path + s.role + s.employeeId} className={cx('anim-fade', FULL_BLEED.some((p) => path.startsWith(p)) ? '' : 'mx-auto max-w-[1440px] px-10 py-8')}>
             <Outlet />
@@ -262,9 +275,17 @@ export default function Shell() {
         </main>
       </div>
 
-      {handing && (
-        <div role="status" className="anim-slide fixed left-1/2 top-24 z-[65] -translate-x-1/2 rounded-2xl border border-line bg-white px-6 py-4 text-[16px] font-semibold shadow-2xl">
-          <span className="mr-2 inline-block h-2.5 w-2.5 animate-pulse rounded-full bg-brand" />Sending to {handing}…
+      {handing && !handing.skip.includes(path) && (
+        <div role="status" data-testid="handoff" className="anim-slide fixed bottom-24 right-6 z-[65] w-[380px] rounded-2xl border border-line bg-white p-5 shadow-2xl">
+          <div className="flex items-start gap-3">
+            <span className="mt-1 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ok text-white"><Check size={15} /></span>
+            <div className="min-w-0 flex-1">
+              <div className="text-[16px] font-semibold">Done. Next is with {handing.name}</div>
+              <div className="text-[15px] text-ink-2">{handing.next}</div>
+            </div>
+            <button onClick={() => setHanding(null)} aria-label="Stay on this page" className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-ink-3 hover:bg-canvas"><X size={17} /></button>
+          </div>
+          <button data-testid="handoff-go" onClick={handing.go} className="mt-4 flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-brand px-4 text-[15px] font-medium text-white hover:bg-brand-dark">{handing.cta} <ArrowRight size={16} /></button>
         </div>
       )}
       {s.toast && (
@@ -286,6 +307,7 @@ export default function Shell() {
 const TONE: Record<NonNullable<ItemStatus>['tone'], string> = { new: 'bg-brand text-white', waiting: 'bg-amber-100 text-amber-900', done: 'bg-ok-soft text-ok', idle: 'bg-canvas text-ink-3' };
 function WorkMenu({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => void }) {
   const s = useDemo();
+  const t = useT();
   const nav = useNavigate();
   const loc = useLocation();
   const groups = WORK_NAV[s.role];
@@ -303,13 +325,13 @@ function WorkMenu({ collapsed, onToggle }: { collapsed: boolean; onToggle: () =>
         <span className="text-[14px] font-semibold text-ink-3">{PERSONAS[s.role].label}</span>
         <button onClick={onToggle} aria-label="Collapse the work menu" title="Collapse" className="grid h-9 w-9 place-items-center rounded-lg text-ink-3 hover:bg-canvas"><PanelLeftClose size={18} /></button>
       </div>
-      {groups[0]?.label === 'My work' && <div className="mt-4 px-5 pb-1.5 text-[14px] font-semibold text-ink-3">My work</div>}
+      {groups[0]?.label === 'My work' && <div className="mt-4 px-5 pb-1.5 text-[14px] font-semibold text-ink-3">{t('My work')}</div>}
       <button onClick={() => nav(`/r/${s.role}`)} aria-current={loc.pathname.startsWith('/r/') ? 'page' : undefined} className={cx('mx-2 flex w-[calc(100%-16px)] items-center justify-between rounded-lg px-3 py-2.5 text-left text-[16px] font-semibold', loc.pathname.startsWith('/r/') ? 'bg-brand-soft text-brand-dark' : 'hover:bg-canvas')}>
-        My tasks {n > 0 && <span className="rounded-full bg-brand px-2 text-[14px] font-bold leading-5 text-white">{n}</span>}
+        {t('My tasks')} {n > 0 && <span className="rounded-full bg-brand px-2 text-[14px] font-bold leading-5 text-white">{n}</span>}
       </button>
       {groups.map((g) => (
         <div key={g.label} className={g.label === 'My work' ? 'mt-0.5' : 'mt-4'}>
-          {g.label !== 'My work' && <div className="px-5 pb-1.5 text-[14px] font-semibold text-ink-3">{g.label}</div>}
+          {g.label !== 'My work' && <div className="px-5 pb-1.5 text-[14px] font-semibold text-ink-3">{t(g.label)}</div>}
           <ul>
             {g.items.map((it) => {
               const on = it.to.includes('?') ? loc.pathname + loc.search === it.to : !loc.search.includes('s=') && navGroupOf(s.role, loc.pathname)?.item.to === it.to;
@@ -317,7 +339,7 @@ function WorkMenu({ collapsed, onToggle }: { collapsed: boolean; onToggle: () =>
               return (
                 <li key={it.to}>
                   <button onClick={() => nav(it.to)} aria-current={on ? 'page' : undefined} title={it.fr} className={cx('mx-2 flex w-[calc(100%-16px)] items-center gap-2 rounded-lg px-3 py-2 text-left text-[15px]', on ? 'bg-canvas font-semibold text-ink' : 'text-ink-2 hover:bg-canvas hover:text-ink')}>
-                    <span className="min-w-0 flex-1 leading-snug">{it.label}</span>
+                    <span className="min-w-0 flex-1 leading-snug">{t(it.label)}</span>
                     {status && <span className={cx('shrink-0 rounded-full px-2 text-[13px] font-semibold leading-5', TONE[status.tone])}>{status.text}</span>}
                   </button>
                 </li>
@@ -371,6 +393,10 @@ function EarlyStepBanner({ switchRole }: { switchRole: Switch }) {
   if (s.revisit !== null || ji >= JOURNEY.length) return null;
   const later = JOURNEY.findIndex((j, i) => i > ji && journeyScreens(j).includes(loc.pathname) && !journeyScreens(JOURNEY[ji]).includes(loc.pathname) && !journeyDone(j, s));
   if (later === -1) return null;
+  // just acted on this page: the "done, next" note is enough
+  let pi = ji - 1;
+  while (pi > 0 && JOURNEY[pi].who === 'system') pi--;
+  if (pi >= 0 && journeyScreens(JOURNEY[pi]).includes(loc.pathname) && journeyDone(JOURNEY[pi], s)) return null;
   const cur = JOURNEY[ji];
   const act = journeyAction(cur, s);
   return (
@@ -401,7 +427,7 @@ export function ArrivalLine({ openImpact }: { openImpact: (k: string) => void })
 /** Open a dashboard stop: switch to its role and page, and show the stop banner there. */
 export function useOpenStop() {
   const switchRole = useSwitchRole();
-  return (x: Showcase) => { useDemo.getState().setStop({ label: x.label, path: x.to }); switchRole(x.role, x.to); };
+  return (x: Showcase) => { useDemo.getState().setStop({ label: x.label, path: x.to }); switchRole(x.role, x.to, x.emp); };
 }
 
 function ContextBar({ switchRole, openOverview, openJourney }: { switchRole: Switch; openOverview: () => void; openJourney: () => void }) {
@@ -497,6 +523,7 @@ const VIEWS: { label: string; role: Role; to?: string; emp?: string; sub?: boole
   { label: 'Trainer', role: 'trainer' },
   { label: 'Finance (proposed)', role: 'finance' },
   { label: 'Management (proposed)', role: 'management' },
+  { label: 'System Admin', role: 'admin' },
 ];
 function ViewingAs({ switchRole }: { switchRole: Switch }) {
   const s = useDemo();
@@ -557,6 +584,7 @@ export function GuidedStepNote({ switchRole, openImpact }: { switchRole: Switch;
         <span className="flex items-center gap-2 text-[15px] font-medium text-brand"><span className="anim-pulse h-2 w-2 rounded-full bg-brand" />Step {ji + 1} of {JOURNEY.length}</span>
         <span className="text-[17px] font-medium">{person ? `${person.name}: ` : ''}{act.label}</span>
         {next && <span className="ml-auto text-[15px] text-ink-3">Next: {next.short}</span>}
+        {cur.impactKey && STEP_ACTIONS.has(cur.impactKey) && <button data-testid="step-action" onClick={() => window.dispatchEvent(new Event('eldp:step-action'))} className="flex min-h-10 items-center gap-2 rounded-lg bg-brand px-4 text-[15px] font-medium text-white hover:bg-brand-dark">{act.cta} <ArrowRight size={16} /></button>}
       </section>
     );
   }
@@ -581,6 +609,25 @@ function JourneyDrawer({ open, onClose, switchRole }: { open: boolean; onClose: 
   const [confirm, setConfirm] = useState<number | null>(null);
   if (!open) return null;
   const ji = journeyIndex(s);
+  /** Go to any step at any time: back restores the saved state of that step, forward completes the steps in between. */
+  const jumpTo = (i: number) => {
+    const st = useDemo.getState();
+    const from = journeyIndex(st);
+    if (i < from) {
+      if (st.snaps[i] !== undefined) st.rewindTo(i);
+      else { st.reset(); for (let g = 0; g < 400 && journeyIndex(useDemo.getState()) < i; g++) useDemo.getState().advance(); }
+    } else if (i > from) {
+      for (let g = 0; g < 400 && journeyIndex(useDemo.getState()) < i; g++) useDemo.getState().advance();
+    }
+    const reached = journeyIndex(useDemo.getState());
+    const msg = i === from ? `Step ${i + 1}` : i < from ? `Back to step ${i + 1}. Later steps were undone.`
+      : reached > i ? `Step ${i + 1} runs automatically with the step before it, so it is already done.` : `Jumped to step ${i + 1}. Earlier steps were completed for you.`;
+    useDemo.setState({ arrival: null, impact: null, undo: null, revisit: null, toast: msg });
+    setConfirm(null);
+    onClose();
+    const a = journeyAction(JOURNEY[Math.min(i, JOURNEY.length - 1)], useDemo.getState());
+    switchRole(a.role, a.to, a.emp);
+  };
   return (
     <div className="anim-fade fixed inset-0 z-50 bg-black/30" onClick={onClose}>
       <aside role="dialog" aria-modal="true" aria-label="Guided journey" className="anim-drawer absolute right-0 top-0 h-full w-full max-w-2xl overflow-y-auto bg-white shadow-2xl" onClick={(e) => e.stopPropagation()}>
@@ -588,29 +635,32 @@ function JourneyDrawer({ open, onClose, switchRole }: { open: boolean; onClose: 
           <div><div className="text-[14px] text-ink-3">{TRAINING.requestId} · {TRAINING.title} · <SourceTag kind="concept">Example business flow</SourceTag></div><h2 className="text-[26px] font-extrabold tracking-tight">Guided journey</h2></div>
           <button onClick={onClose} aria-label="Close" className="grid h-11 w-11 place-items-center rounded-lg text-ink-3 hover:bg-canvas"><X size={20} /></button>
         </div>
-        <p className="border-b border-line px-7 py-4 text-[15px] text-ink-2">An example flow through one training. Each module also works on its own (FR 247). Open any finished step to see it again, or restart the story from that step.</p>
+        <p className="border-b border-line px-7 py-4 text-[15px] text-ink-2">An example flow through one training. Each module also works on its own (FR 247). Go to any step at any time. Jumping ahead completes the earlier steps for you; going back restarts the story from that step. Finished steps can also be revisited without changing anything.</p>
         <ol className="px-7 py-6">
           {JOURNEY.map((j, i) => {
             const done = journeyDone(j, s);
             const current = i === ji;
             const ev = journeyEvent(j, s);
             const act = journeyAction(j, s);
-            const canRewind = done && s.snaps[i] !== undefined;
+            const canRewind = done;
             return (
               <li key={j.title} className="relative flex gap-5 pb-6">
                 {i < JOURNEY.length - 1 && <span className={cx('absolute left-[19px] top-11 h-[calc(100%-36px)] w-[2px]', done ? 'bg-ok' : 'bg-line')} />}
                 <span className={cx('relative z-10 grid h-10 w-10 shrink-0 place-items-center rounded-full text-[15px] font-bold', done ? 'bg-ok text-white' : current ? 'anim-pulse bg-brand text-white' : 'border-2 border-line bg-white text-ink-3')}>{done ? <Check size={18} /> : i + 1}</span>
-                <div className={cx('min-w-0 flex-1', current && 'rounded-2xl border border-[#efd9d6] bg-[#fdf7f6] p-5', !done && !current && 'opacity-60')}>
+                <div className={cx('min-w-0 flex-1', current && 'rounded-2xl border border-[#efd9d6] bg-[#fdf7f6] p-5')}>
                   <div className="flex flex-wrap items-center gap-2 text-[14px] text-ink-3">Step {i + 1} · {j.who === 'system' ? 'System' : ROLE_LABEL[j.who]}<FrRef>{j.fr}</FrRef></div>
                   <div className={cx('font-bold', current ? 'text-[20px]' : 'text-[17px]')}>{j.title}</div>
                   {current && <p className="mt-1 text-[16px] text-ink-2">{j.explain}</p>}
                   {(j.showcase ?? []).map((x) => (
-                    <button key={x.label + x.to} onClick={() => { onClose(); useDemo.getState().setStop({ label: x.label, path: x.to }); switchRole(x.role, x.to); }} className="mt-2 flex items-center gap-2 rounded-lg border border-dashed border-sky-200 bg-sky-50 px-3 py-1.5 text-left text-[15px] text-sky-900 hover:border-sky-300">
+                    <button key={x.label + x.to} onClick={() => { onClose(); useDemo.getState().setStop({ label: x.label, path: x.to }); switchRole(x.role, x.to, x.emp); }} className="mt-2 flex items-center gap-2 rounded-lg border border-dashed border-sky-200 bg-sky-50 px-3 py-1.5 text-left text-[15px] text-sky-900 hover:border-sky-300">
                       <Gauge size={15} />Show{x.when === 'after' ? ' after this step' : ''}: <b>{x.label}</b><span className="text-sky-800/80">· {x.why}</span>
                     </button>
                   ))}
                   {done && <p className="mt-0.5 text-[15px] text-ink-2">{j.result}{ev && <span className="text-ink-3"> · {ev.actor}, {ev.at.slice(12)}</span>}</p>}
                   {current && <button onClick={() => { onClose(); switchRole(act.role, act.to, act.emp); }} className="mt-3 flex min-h-11 items-center gap-2 rounded-lg bg-brand px-4 text-[15px] font-bold text-white hover:bg-brand-dark">{act.cta} <ArrowRight size={15} /></button>}
+                  {!done && !current && (
+                    <button onClick={() => jumpTo(i)} className="mt-2 flex min-h-10 items-center gap-2 rounded-lg border border-line bg-white px-4 text-[15px] font-semibold hover:border-ink/30">Go to this step <ArrowRight size={15} /></button>
+                  )}
                   {done && (
                     <div className="mt-3 flex flex-wrap gap-2">
                       <button onClick={() => { onClose(); s.setRevisit(i); switchRole(act.role, act.to, act.emp); }} className="flex min-h-10 items-center gap-2 rounded-lg border border-line bg-white px-4 text-[15px] font-semibold hover:border-ink/30">Revisit this step <ArrowRight size={15} /></button>
@@ -622,7 +672,7 @@ function JourneyDrawer({ open, onClose, switchRole }: { open: boolean; onClose: 
                       Restart the story at step {i + 1}? Steps {i + 1}–{ji} will be undone and can be done again.
                       <div className="mt-3 flex gap-2">
                         <button onClick={() => setConfirm(null)} className="min-h-10 rounded-lg border border-line bg-white px-4 font-semibold">Cancel</button>
-                        <button onClick={() => { s.rewindTo(i); setConfirm(null); onClose(); const a = journeyAction(JOURNEY[i], useDemo.getState()); switchRole(a.role, a.to, a.emp); }} className="min-h-10 rounded-lg bg-brand px-4 font-bold text-white">Restart from step {i + 1}</button>
+                        <button onClick={() => jumpTo(i)} className="min-h-10 rounded-lg bg-brand px-4 font-bold text-white">Restart from step {i + 1}</button>
                       </div>
                     </div>
                   )}

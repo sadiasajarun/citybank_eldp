@@ -130,6 +130,18 @@ export function MyRecord() {
         actions={<><Btn v="link" onClick={() => nav('/journey')}>Open my learning journey <ArrowRight size={16} /></Btn><Btn v="secondary" onClick={exportCsv}><Download size={16} />Export CSV</Btn></>}
       />
 
+      {s.completed && !s.recordSynced && empId === 'e1' && (
+        <section className="mb-6 flex flex-wrap items-center gap-4 rounded-2xl border border-[#efd9d6] bg-white px-6 py-5">
+          <div className="min-w-0 flex-1">
+            <div className="text-[18px] font-semibold">HR closed the training · the record is ready to update</div>
+            <p className="text-[16px] text-ink-2">Attendance, 16 learning hours and feedback for Advanced Credit Risk Management are written to this record and the training database.</p>
+          </div>
+          <Btn onClick={() => s.syncRecords()}>Update learning record</Btn>
+        </section>
+      )}
+      {s.recordSynced && empId === 'e1' && (
+        <div className="mb-6"><Alert kind="ok" title="Learning record updated">Advanced Credit Risk Management is recorded as completed with 16 learning hours. Supervisors and management dashboards now show it.</Alert></div>
+      )}
       {fresh && (
         <div className="mb-6">
           <Alert kind="ok" title="Just updated from attendance">{fresh.learning} · {fresh.hours} learning hours added to your record and the training database when HR submitted attendance.</Alert>

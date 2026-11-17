@@ -5,7 +5,8 @@ import { ArrowRight, Check, Play, Send, Sparkles } from 'lucide-react';
 import { TRAINING } from '../../data';
 import { ptResults, useDemo } from '../../store';
 import { PageHead, NotYet } from '../../components/Templates';
-import { Badge, cx, inputCls, Progress } from '../../components/ui';
+import { Badge, cx, inputCls, Modal, Progress } from '../../components/ui';
+import { PreCheck, ProctorAside, ProctorToast, useProctoring } from '../assessment/proctor';
 import { DEFAULT_MODULES } from '../decisions/CourseSetup';
 
 const NOTES: Record<number, string> = {
@@ -126,47 +127,75 @@ export function TrainingAssessment() {
   const nav = useNavigate();
   const [ans, setAns] = useState<number[]>([-1, -1, -1, -1]);
   const [text, setText] = useState('');
+  const [attemptId, setAttemptId] = useState<string | null>(() => { const a = s.attempts[`pta-${s.employeeId}`]; return a && !a.submitted ? a.id : null; });
+  const [confirm, setConfirm] = useState(false);
+  const live = !!attemptId && !s.ptaSubmitted;
+  const { toast, blockCopy } = useProctoring(attemptId, live);
   const mine = ptResults(s).find((r) => r.id === 'e1');
-  const head = <PageHead title="Post-training assessment" meta={`${TRAINING.title} · 20 objective + 1 descriptive · pass mark 70%`} fr="FR 210–212" />;
+  const meta = `${TRAINING.title} · 20 objective + 1 descriptive · pass mark 70%`;
+  const head = <PageHead title="Post-training assessment" meta={meta} fr="FR 210–212" />;
   if (!s.attendanceSubmitted) return <div>{head}<NotYet title="The assessment opens after the training days" after="attendance is submitted" /></div>;
   if (s.ptaSubmitted) {
+    const a = s.attempts['pta-e1'];
     return (
       <div className="mx-auto max-w-[900px]">
         {head}
         <section className="rounded-2xl bg-white px-7 py-6 ring-1 ring-line">
           <p className="flex items-center gap-2 text-[18px] font-medium text-ok"><Check size={20} />Submitted</p>
-          <p className="mt-2 text-[16px] text-ink-2">{s.pta.released && mine?.score != null ? `Result: ${mine.status} · ${mine.score}%` : 'Your trainer is evaluating your answers. You will see the result here.'}</p>
+          <p className="mt-2 text-[16px] text-ink-2">{s.pta.released && mine?.score != null ? `Result: ${mine.status} · ${mine.score}%` : 'Your trainer reviews the proctoring evidence and your answers. You will see the result here.'}</p>
+          {a && <p className="mt-1 text-[15px] text-ink-3">{a.events.length} proctoring events were recorded for a human reviewer (simulated). Nothing fails automatically.</p>}
           <button onClick={() => nav('/employee')} className="mt-4 text-[15px] text-brand hover:underline">Back to my learning →</button>
         </section>
       </div>
     );
   }
-  const ready = ans.every((x) => x >= 0) && text.trim().length >= 20;
+  if (!attemptId) return <PreCheck title="Post-training assessment" meta={`${TRAINING.title} · 45 minutes · pass 70% · proctored`} onBegin={() => setAttemptId(s.startAttempt('PTA'))} />;
+
+  const answered = ans.filter((x) => x >= 0).length + (text.trim().length >= 20 ? 1 : 0);
+  const unanswered = 5 - answered;
+  const submit = () => {
+    const correct = QUESTIONS.filter((x, i) => ans[i] === x.a).length;
+    s.saveAttempt(attemptId, { answers: Object.fromEntries(ans.map((v, i) => [`q${i + 1}`, v])) });
+    s.submitAttempt(attemptId, correct, QUESTIONS.length);
+    s.submitAssessment();
+    setConfirm(false);
+  };
+  const events = s.attempts[attemptId]?.events ?? [];
   return (
-    <div className="mx-auto max-w-[900px]">
-      {head}
-      <section className="space-y-5 rounded-2xl bg-white px-7 py-6 ring-1 ring-line">
-        <p className="text-[15px] text-ink-3">Showing 4 of the 20 objective questions in this demo.</p>
-        {QUESTIONS.map((x, i) => (
-          <fieldset key={i}>
-            <legend className="mb-2 text-[16px] font-medium">{i + 1}. {x.q}</legend>
-            <div className="flex flex-wrap gap-2">
-              {x.o.map((o, k) => (
-                <label key={k} className={cx('flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-[15px] ring-1', ans[i] === k ? 'bg-sky-50 ring-sky-300' : 'ring-line')}>
-                  <input type="radio" name={`q${i}`} checked={ans[i] === k} onChange={() => setAns(ans.map((v, j) => (j === i ? k : v)))} className="accent-brand" />{o}
-                </label>
-              ))}
-            </div>
-          </fieldset>
-        ))}
-        <label className="block">
-          <span className="mb-2 block text-[16px] font-medium">5. A borrower’s operating cash flow fell 30% this year. What would you check, and what would you recommend?</span>
-          <textarea rows={5} className={inputCls} value={text} onChange={(e) => setText(e.target.value)} placeholder="At least 20 characters" />
-        </label>
-        <div className="flex justify-end">
-          <button disabled={!ready} onClick={() => s.submitAssessment()} className="min-h-12 rounded-xl bg-brand px-6 text-[16px] font-medium text-white hover:bg-brand-dark disabled:opacity-50">Submit assessment</button>
-        </div>
-      </section>
+    <div className="mx-auto max-w-[1280px]">
+      <div className="sticky top-0 z-20 mb-5 flex flex-wrap items-center gap-4 rounded-2xl bg-white px-5 py-3 shadow-sm ring-1 ring-line">
+        <h1 className="text-[18px] font-semibold">Post-training assessment</h1>
+        <span className="rounded-full bg-canvas px-3 py-0.5 text-[14px]">{answered} of 5 answered</span>
+        <span className="h-1.5 w-32 rounded-full bg-canvas"><span className="block h-1.5 rounded-full bg-brand" style={{ width: `${(answered / 5) * 100}%` }} /></span>
+        <span className="ml-auto flex items-center gap-2 text-[14px] text-ink-3"><span className="h-2 w-2 animate-pulse rounded-full bg-brand" />Proctored · recording</span>
+        <button onClick={() => (unanswered ? setConfirm(true) : submit())} className="min-h-10 rounded-lg bg-brand px-4 text-[15px] font-medium text-white hover:bg-brand-dark">Submit assessment</button>
+      </div>
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <section className="select-none space-y-5 rounded-2xl bg-white px-7 py-6 ring-1 ring-line" onCopy={blockCopy} onCut={blockCopy} onContextMenu={blockCopy}>
+          <p className="text-[15px] text-ink-3">Showing 4 of the 20 objective questions in this demo.</p>
+          {QUESTIONS.map((x, i) => (
+            <fieldset key={i}>
+              <legend className="mb-2 text-[16px] font-medium">{i + 1}. {x.q}</legend>
+              <div className="flex flex-wrap gap-2">
+                {x.o.map((o, k) => (
+                  <label key={k} className={cx('flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-[15px] ring-1', ans[i] === k ? 'bg-sky-50 ring-sky-300' : 'ring-line')}>
+                    <input type="radio" name={`q${i}`} checked={ans[i] === k} onChange={() => setAns(ans.map((v, j) => (j === i ? k : v)))} className="accent-brand" />{o}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          ))}
+          <label className="block">
+            <span className="mb-2 block text-[16px] font-medium">5. A borrower’s operating cash flow fell 30% this year. What would you check, and what would you recommend?</span>
+            <textarea rows={5} className={inputCls} value={text} onChange={(e) => setText(e.target.value)} onPaste={blockCopy} placeholder="At least 20 characters · pasting is blocked" />
+          </label>
+        </section>
+        <ProctorAside events={events} toast={toast} />
+      </div>
+      <ProctorToast toast={toast} />
+      <Modal open={confirm} onClose={() => setConfirm(false)} title="Submit with unanswered questions?" footer={<><button onClick={() => setConfirm(false)} className="min-h-11 rounded-lg border border-line px-4">Keep answering</button><button onClick={submit} className="min-h-11 rounded-lg bg-brand px-4 font-medium text-white">Submit anyway</button></>}>
+        <p className="text-[16px]">You have <b>{unanswered}</b> unanswered question{unanswered === 1 ? '' : 's'}. Unanswered questions score zero (FR 212).</p>
+      </Modal>
     </div>
   );
 }

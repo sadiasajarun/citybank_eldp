@@ -67,7 +67,6 @@ export function TnaPage() {
 function GapWay() {
   const s = useDemo();
   const [name, setName] = useState(COMPETENCIES[0].name);
-  const [why, setWhy] = useState(false);
   const [officers, setOfficers] = useState(false);
   const c: CompetencyView = COMPETENCIES.find((x) => x.name === name) ?? COMPETENCIES[0];
   const t = s.tna;
@@ -85,46 +84,35 @@ function GapWay() {
         ))}
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
-        <div className="rounded-2xl border border-line px-7 py-6">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <div className="text-[14px] text-ink-3">{c.category} competency</div>
-              <div className="mt-1 text-[44px] font-semibold leading-none tabular-nums">{c.below}<span className="text-[22px] text-ink-3"> of {c.total} below target</span></div>
-            </div>
-            <PriorityPill>{c.priority}</PriorityPill>
+      <div className="mt-6 rounded-2xl border border-line px-7 py-6">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <div className="text-[14px] text-ink-3">{c.category} competency</div>
+            <div className="mt-1 text-[44px] font-semibold leading-none tabular-nums">{c.below}<span className="text-[22px] text-ink-3"> of {c.total} below target</span></div>
           </div>
-          <GapScale current={c.current} target={c.target} className="mt-6" />
-          <p className="mt-5 text-[15px] text-ink-2">Roles: {c.roles}</p>
+          <PriorityPill>{c.priority}</PriorityPill>
+        </div>
+        <GapScale current={c.current} target={c.target} className="mt-6" />
+        <dl className="mt-5 grid gap-x-6 gap-y-3 border-t border-line pt-4 md:grid-cols-2">
+          <div className="min-w-0"><dt className="text-[14px] text-ink-3">Roles</dt><dd className="text-[16px]">{c.roles}</dd></div>
+          <div className="min-w-0"><dt className="text-[14px] text-ink-3">Training</dt><dd className="text-[16px]">{c.training || 'No training needed now'}</dd></div>
+        </dl>
+        <div className="mt-5 flex flex-wrap items-center gap-4">
+          {c.story ? (
+            included
+              ? <button onClick={() => s.setTna({ gap: false })} disabled={done} className={quiet}><Check size={16} className="text-ok" />Added to your request</button>
+              : <button onClick={() => s.setTna({ gap: true, recommendation: 'accepted' })} disabled={done} className={primary}>Add to training request</button>
+          ) : c.training ? (
+            <button onClick={() => s.setTna({ later: later ? t.later.filter((x) => x !== c.name) : [...t.later, c.name] })} className={quiet}>{later ? <><Check size={16} className="text-ok" />Saved for the next cycle</> : 'Save for the next cycle'}</button>
+          ) : null}
           {c.story && (
-            <button onClick={() => setOfficers((v) => !v)} aria-expanded={officers} className="mt-3 flex items-center gap-1.5 text-[15px] text-brand hover:underline">
+            <button onClick={() => setOfficers((v) => !v)} aria-expanded={officers} className="flex items-center gap-1.5 text-[15px] text-brand hover:underline">
               {officers ? <ChevronUp size={16} /> : <ChevronDown size={16} />}{officers ? 'Hide' : 'See'} the {c.below} officers
             </button>
           )}
         </div>
-
-        <div className="flex flex-col rounded-2xl bg-[#f1f6fb] px-7 py-6">
-          <div className="flex items-center gap-2 text-[14px] text-sky-900"><Sparkles size={16} />AI suggestion · you decide</div>
-          {c.training ? (
-            <>
-              <div className="mt-2 text-[24px] font-semibold leading-tight">{c.training}</div>
-              <p className="mt-1 text-[15px] text-ink-2">Based on: {c.reason.toLowerCase()}.</p>
-            </>
-          ) : <div className="mt-2 text-[20px] font-medium">No training needed now</div>}
-          <div className="mt-auto flex flex-wrap items-center gap-3 pt-6">
-            {c.story ? (
-              included
-                ? <button onClick={() => s.setTna({ gap: false })} disabled={done} className={quiet}><Check size={16} className="text-ok" />Added to your request</button>
-                : <button onClick={() => s.setTna({ gap: true, recommendation: 'accepted' })} disabled={done} className={primary}>Use this recommendation</button>
-            ) : c.training ? (
-              <button onClick={() => s.setTna({ later: later ? t.later.filter((x) => x !== c.name) : [...t.later, c.name] })} className={quiet}>{later ? <><Check size={16} className="text-ok" />Saved for the next cycle</> : 'Save for the next cycle'}</button>
-            ) : null}
-            {c.story && <button onClick={() => setWhy(true)} className="text-[15px] text-sky-800 hover:underline">Why?</button>}
-          </div>
-        </div>
       </div>
       {officers && c.story && <div className="mt-6"><OfficerTable /></div>}
-      <WhyDrawer open={why} onClose={() => setWhy(false)} accepted={s.tna.recommendation === 'accepted'} />
     </section>
   );
 }

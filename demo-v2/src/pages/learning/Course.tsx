@@ -87,7 +87,7 @@ export function CoursePage() {
 
   const tags = <><SourceTag kind="fictional">Course and learner data are fictional</SourceTag><SourceTag kind="simulated">Content and tracking simulated</SourceTag></>;
   const actions = view === 'overview'
-    ? <Btn onClick={() => open(c.completed ? MODS.length - 1 : undefined)}>{c.completed ? 'View certificate' : c.progress > 0 ? `Resume (${c.progress}%)` : 'Start course'} <ArrowRight size={16} /></Btn>
+    ? <span className="flex flex-wrap gap-2"><Btn v="secondary" onClick={() => s.toggleBookmark('EL004')}>{s.learn.bookmarks.includes('EL004') ? 'Bookmarked' : 'Bookmark'}</Btn><Btn v="secondary" onClick={() => s.toggleDownload('EL004', 'Information Security Awareness 2026')}>{s.learn.downloads.some((d) => d.id === 'EL004') ? 'Saved offline' : 'Save offline'}</Btn><Btn onClick={() => { s.viewCourse('EL004'); open(c.completed ? MODS.length - 1 : undefined); }}>{c.completed ? 'View certificate' : c.progress > 0 ? `Resume (${c.progress}%)` : 'Start course'} <ArrowRight size={16} /></Btn></span>
     : <Btn v="secondary" onClick={() => setView('overview')}><ArrowLeft size={16} />Course overview</Btn>;
 
   return (

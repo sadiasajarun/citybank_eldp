@@ -8,6 +8,7 @@ import { JOURNEY } from '../../lifecycle';
 import { DecisionLayout, DecisionPanel, NotYet, PageHead } from '../../components/Templates';
 import { FrRef, SourceTag } from '../../components/Source';
 import { AiLabel, Avatar, Badge, Btn, cx, inputCls } from '../../components/ui';
+import { EvidenceStrip } from '../assessment/proctor';
 
 /* Evidence captured during the post-training assessment (simulated proctoring, FR 212). */
 const RUBRIC: [string, boolean][] = [
@@ -19,7 +20,7 @@ const RUBRIC: [string, boolean][] = [
 ];
 const ANSWER = '“The borrower’s inventory days rose from 60 to 95 while receivables slowed, so operating cash flow will not cover the next two instalments. I would downgrade the risk grade, ask for a stock audit, tighten the drawing-power covenant and take additional collateral before renewing the limit…”';
 const MCQ = { got: 36, of: 40 };
-const STEPS = ['Score', 'Result'];
+const STEPS = ['Integrity', 'Score', 'Result'];
 
 
 export function AssessmentReview() {
@@ -32,7 +33,7 @@ export function AssessmentReview() {
       meta={<>{TRAINING.title} · training {TRAINING.trainingId} · exam tagged to this training</>}
       fr="FR 210–217"
       tags={<SourceTag kind="fictional" />}
-      actions={<Btn v="link" onClick={() => nav('/assessment')}>Exam details &amp; candidate view <ArrowRight size={15} /></Btn>}
+      actions={<Btn v="link" onClick={() => nav('/assessment/integrity/pta-e1')}>Proctoring evidence review <ArrowRight size={15} /></Btn>}
     />
   );
   if (!s.attendanceSubmitted) return <div>{head}<NotYet title="The assessment opens after the training" after={`attendance is submitted (Step ${attStep})`} /></div>;
@@ -43,7 +44,7 @@ export function AssessmentReview() {
 function Review() {
   const s = useDemo();
   const p = s.pta;
-  const derived = p.decision === 'pending' ? 0 : 1;
+  const derived = p.integrity === 'pending' ? 0 : p.decision === 'pending' ? 1 : 2;
   const [view, setView] = useState<number | null>(null);
   const step = view !== null && view <= derived ? view : derived;
   const results = ptResults(s);
@@ -55,7 +56,7 @@ function Review() {
       {/* stepper: completed steps can be reopened (read-only) */}
       <ol className="mb-6 flex flex-wrap items-center gap-3" aria-label="Review steps">
         {STEPS.map((x, i) => {
-          const done = i < derived || (i === 1 && p.released);
+          const done = i < derived || (i === 2 && p.released);
           const on = i === step;
           return (
             <li key={x} className="flex items-center gap-3">
@@ -77,8 +78,9 @@ function Review() {
         {view !== null && view < derived && <Btn v="secondary" size="sm" onClick={() => setView(null)}>Back to current step</Btn>}
       </div>
 
-      {step === 0 && <ScoreStep readOnly={derived > 0} />}
-      {step === 1 && <ResultStep />}
+      {step === 0 && <IntegrityStep readOnly={derived > 0} />}
+      {step === 1 && <ScoreStep readOnly={derived > 1} />}
+      {step === 2 && <ResultStep />}
     </div>
   );
 }
@@ -89,6 +91,42 @@ function ChoiceCard({ on, disabled, onClick, icon, title, text }: { on: boolean;
       <span className={cx('mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full', on ? 'bg-ink text-white' : 'bg-canvas text-ink-2')}>{icon}</span>
       <span className="min-w-0"><span className="block text-[16px] font-bold">{title}</span><span className="block text-[15px] text-ink-2">{text}</span></span>
     </button>
+  );
+}
+
+/* ---------------- ① Integrity: the proctoring evidence from the secure exam ---------------- */
+function IntegrityStep({ readOnly }: { readOnly: boolean }) {
+  const s = useDemo();
+  const nav = useNavigate();
+  const a = s.attempts['pta-e1'];
+  const [mode, setMode] = useState<'cleared' | 'flagged' | null>(readOnly ? (s.pta.integrity === 'pending' ? null : s.pta.integrity) : null);
+  const [reason, setReason] = useState(readOnly ? s.pta.note : '');
+  const ok = mode === 'cleared' || (mode === 'flagged' && reason.trim().length > 2);
+  const events = a?.events ?? [];
+  return (
+    <DecisionLayout
+      panel={
+        <DecisionPanel title="Integrity decision" what="Events are signals, not verdicts. Clear the attempt, or flag it for the assessment committee with a reason." note="Proctoring never fails anyone automatically.">
+          <ChoiceCard on={mode === 'cleared'} disabled={readOnly} onClick={() => setMode('cleared')} icon={<Check size={18} />} title="Clear" text="No integrity concern. Continue to scoring." />
+          <ChoiceCard on={mode === 'flagged'} disabled={readOnly} onClick={() => setMode('flagged')} icon={<span className="text-[15px] font-bold">!</span>} title="Flag for committee" text="The result is withheld until the committee decides." />
+          {(mode === 'flagged' || (readOnly && reason)) && (
+            <label className="block"><span className="text-[15px] font-semibold text-ink-2">Reason{mode === 'flagged' ? ' (required)' : ''}</span>
+              <textarea rows={3} disabled={readOnly} value={reason} onChange={(e) => setReason(e.target.value)} className={cx(inputCls, 'mt-1.5')} placeholder="e.g. Repeated gaze away during the descriptive answer" />
+            </label>
+          )}
+          {!readOnly && <Btn disabled={!ok} onClick={() => s.decideAttempt('pta-e1', mode!, mode === 'cleared' ? reason.trim() || 'Events explained; no integrity concern.' : reason.trim())}>Record integrity decision</Btn>}
+        </DecisionPanel>
+      }
+    >
+      <section className="rounded-2xl border border-line bg-white px-6 py-5">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <h3 className="text-[20px] font-bold">Proctoring evidence · secure exam</h3>
+          <span className="flex items-center gap-3"><SourceTag kind="simulated">Frames and events simulated</SourceTag><Btn v="link" onClick={() => nav('/assessment/integrity/pta-e1')}>Open full evidence review <ArrowRight size={15} /></Btn></span>
+        </div>
+        {a ? <EvidenceStrip events={events} faceMatch={a.faceMatch} /> : <p className="text-[16px] text-ink-2">No proctoring record for this attempt.</p>}
+        <p className="mt-4 text-[15px] text-ink-3">Started {a?.started ?? '—'} · identity verified against the Employee ID photo before the exam.</p>
+      </section>
+    </DecisionLayout>
   );
 }
 

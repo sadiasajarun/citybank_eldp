@@ -249,7 +249,7 @@ export function SupervisorRequests() {
   );
 
   if (open) return <div>{head}<RequestDecision req={open} onBack={() => setSel(null)} /></div>;
-  if (reqs.length === 0) return <div>{head}<NotYet title="No withdrawal requests from your team" after="an employee in your team chooses Withdrawn Request on their invitation" /></div>;
+  if (reqs.length === 0) return <div>{head}<NotYet title="No withdrawal requests from your team" after="an employee in your team chooses Withdraw Request on their invitation" /></div>;
 
   const cols: Column<Req>[] = [
     { key: 'emp', header: 'Employee', render: (r) => <div className="flex items-center gap-3"><Avatar name={r.p.name} size={32} /><div><div className="font-semibold">{r.p.name}</div><div className="text-[14px] text-ink-3">{r.p.designation}</div></div></div>, sort: (r) => r.p.name },

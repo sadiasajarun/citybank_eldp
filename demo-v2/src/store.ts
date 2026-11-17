@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 import { CONFLICT_IDS, NOMINEE_LIST, PERSONAS, TRAINING } from './data';
 import { creditGap, DIRECTORY, findById, GAP_TEXT, VENUES, type Person } from './org';
 import { idpPeople } from './tnaData';
+import { BOOKMARKS_SEED, DOWNLOADS_SEED, FORUM, GOALS, MAKER_CHECKER, PERMISSIONS, USERS, type Exam, type ForumPost, type Goal, type MakerCheck, type Question, type UserRow } from './seed/bank';
 import type { Attendance, AuditEvent, Employee, Notice, Participation, Role } from './types';
 
 /* ================================================================== */
@@ -123,6 +124,37 @@ export interface Enrollment {
 }
 export interface Arrival { path: string; from: string; text: string; at: string; key?: string }
 
+export type ProctorKind = 'tab' | 'focus' | 'face' | 'multi' | 'gaze' | 'head' | 'copy';
+export interface ProctorEvent { t: number; kind: ProctorKind; detail: string; mark?: 'ok' | 'concern' }
+export interface Attempt {
+  id: string; examId: string; empId: string; name: string; started: string; answers: Record<string, number>; flagged: string[];
+  events: ProctorEvent[]; submitted: boolean; score: number | null; total: number; faceMatch: number;
+  decision: 'pending' | 'cleared' | 'flagged' | 'withheld'; reason: string;
+}
+/** Scripted proctoring events (fully simulated, FR 212): fired during the exam and filled in on submit. */
+export const PROCTOR_SCRIPT: ProctorEvent[] = [
+  { t: 38, kind: 'tab', detail: 'Switched to another browser tab for 6 s' },
+  { t: 95, kind: 'gaze', detail: 'Gaze away from the screen for 4 s' },
+  { t: 140, kind: 'copy', detail: 'Copy attempt on question text blocked' },
+  { t: 205, kind: 'head', detail: 'Head turned left for 5 s' },
+  { t: 262, kind: 'focus', detail: 'Exam window lost focus for 3 s' },
+  { t: 330, kind: 'face', detail: 'Face not visible for 2 s' },
+];
+const seedAttempt = (id: string, examId: string, empId: string, name: string, n: number, score: number, decision: Attempt['decision'] = 'pending'): Attempt => ({
+  id, examId, empId, name, started: '11 Nov 2026, 10:00', answers: {}, flagged: [], events: PROCTOR_SCRIPT.slice(0, n).map((e) => ({ ...e })), submitted: true, score, total: 100, faceMatch: 96 - n, decision, reason: decision === 'cleared' ? 'Events explained by the candidate; no integrity concern.' : '',
+});
+export const SEED_ATTEMPTS: Record<string, Attempt> = {
+  'pta-e1': seedAttempt('pta-e1', 'PTA', 'e1', 'Ayesha Rahman', 2, 86),
+  'ex8-rahim': seedAttempt('ex8-rahim', 'EX008', 'r1', 'Rahim Uddin', 5, 72),
+  'ex8-sumaiya': seedAttempt('ex8-sumaiya', 'EX008', 'r2', 'Sumaiya Rahman Mitu', 1, 81, 'cleared'),
+  'ex6-rezaul': seedAttempt('ex6-rezaul', 'EX006', 'r3', 'Md. Rezaul Karim', 3, 88, 'cleared'),
+};
+
+export interface AdminSettings { portalTitle: string; language: 'English' | 'Bangla'; idleTimeout: number; bondLockIn: number; ssoMfa: boolean; makerChecker: boolean; smsWhatsapp: boolean; concurrentSessions: boolean }
+export interface AdminState { mc: MakerCheck[]; perms: Record<string, boolean[]>; users: UserRow[]; settings: AdminSettings; synced: Record<string, string> }
+
+export interface LearnState { lastViewed: string; bookmarks: string[]; downloads: { id: string; title: string; size: string; until: string }[]; goals: Goal[]; forum: ForumPost[]; extraPoints: number }
+
 interface FlowState {
   role: Role;
   employeeId: string;
@@ -139,6 +171,8 @@ interface FlowState {
   nomSetup: NominationSetup; // FR 67-87
   nominationRequested: boolean;
   nominationSubmitted: boolean; // FR 88
+  conflictsChecked: boolean; // FR 10, 114, 244 · HR runs the HRIS / leave / calendar checks
+  recordSynced: boolean; // FR 5, 170 · learning records written after closure
   nominatedCount: number;
   nominatedIds: string[]; // who the Learning Champion actually submitted (FR 88)
   resolutions: Record<string, 'keep' | 'remove'>;
@@ -209,6 +243,16 @@ interface FlowState {
   tour: boolean;
   showFr: boolean;
   presenter: boolean;
+  /** UI language (FR 193): English or Bangla for the key screens. */
+  lang: 'en' | 'bn';
+  /** Learner workspace (FR 205): last viewed course, bookmarks, offline downloads, goals, forum. */
+  learn: LearnState;
+  /** Administration (FR 21, 244; maker-checker and settings are proposed, FR 248–249). */
+  admin: AdminState;
+  /** Exam attempts with simulated proctoring evidence; staff-created exams and questions (FR 210–220). */
+  attempts: Record<string, Attempt>;
+  customExams: Exam[];
+  customQuestions: Question[];
   storyStep: number;
 }
 
@@ -250,6 +294,8 @@ interface Actions {
   startTrainingCourse: () => void;
   completeModule: () => void;
   submitAssessment: () => void;
+  checkConflicts: () => void;
+  syncRecords: () => void;
   linkMaterial: (protection?: string) => void;
   accept: (id: string) => void;
   requestWithdrawal: (reason: string) => void;
@@ -314,6 +360,26 @@ interface Actions {
   setTour: (v: boolean) => void;
   setShowFr: (v: boolean) => void;
   setPresenter: (v: boolean) => void;
+  setLang: (v: 'en' | 'bn') => void;
+  viewCourse: (id: string) => void;
+  decideMc: (id: string, decision: 'Approved' | 'Rejected') => void;
+  proposePermission: (role: string, index: number, moduleName: string) => void;
+  proposeRole: (eid: string, role: UserRow['role']) => void;
+  setUserStatus: (eid: string, status: UserRow['status']) => void;
+  saveSettings: (x: AdminSettings) => void;
+  syncIntegration: (system: string) => void;
+  startAttempt: (examId: string) => string;
+  saveAttempt: (id: string, patch: Partial<Attempt>) => void;
+  submitAttempt: (id: string, score: number, total: number) => void;
+  markEvent: (id: string, index: number, mark: 'ok' | 'concern') => void;
+  decideAttempt: (id: string, decision: 'cleared' | 'flagged' | 'withheld', reason: string) => void;
+  publishExam: (e: Exam, draft: boolean) => void;
+  addQuestion: (q: Question) => void;
+  toggleBookmark: (id: string) => void;
+  toggleDownload: (id: string, title: string) => void;
+  addGoal: (g: Omit<Goal, 'id'>) => void;
+  postForum: (course: string, text: string) => void;
+  replyForum: (postId: string, text: string) => void;
   setStoryStep: (n: number) => void;
 }
 
@@ -378,6 +444,8 @@ const initial: FlowState = {
   nomSetup: initialNomSetup,
   nominationRequested: false,
   nominationSubmitted: false,
+  conflictsChecked: false,
+  recordSynced: false,
   nominatedCount: 0,
   nominatedIds: [],
   resolutions: {},
@@ -445,6 +513,12 @@ const initial: FlowState = {
   tour: true,
   showFr: false,
   presenter: false,
+  lang: 'en',
+  attempts: { ...SEED_ATTEMPTS },
+  admin: { mc: MAKER_CHECKER.map((m) => ({ ...m })), perms: Object.fromEntries(Object.entries(PERMISSIONS).map(([k, v]) => [k, [...v]])), users: USERS.map((u) => ({ ...u })), settings: { portalTitle: 'City Bank PLC — Learning Management System', language: 'English', idleTimeout: 15, bondLockIn: 12, ssoMfa: true, makerChecker: true, smsWhatsapp: true, concurrentSessions: false }, synced: {} },
+  customExams: [],
+  customQuestions: [],
+  learn: { lastViewed: 'EL001', bookmarks: [...BOOKMARKS_SEED], downloads: DOWNLOADS_SEED.map((d) => ({ ...d })), goals: GOALS.map((g) => ({ ...g })), forum: FORUM.map((f) => ({ ...f, replies: [...f.replies] })), extraPoints: 0 },
   storyStep: 0,
 };
 
@@ -511,10 +585,10 @@ export const ptResults = (s: FlowState): { id: string; status: PtStatus; score: 
   });
 };
 
-const STRIP: (keyof FlowState)[] = ['snaps', 'toast', 'impact', 'undo', 'arrival', 'revisit', 'stop', 'handoffTarget', 'tour', 'showFr', 'presenter'];
+const STRIP: (keyof FlowState)[] = ['snaps', 'toast', 'impact', 'undo', 'arrival', 'revisit', 'stop', 'handoffTarget', 'tour', 'showFr', 'presenter', 'lang'];
 export const snapshotOf = (s: FlowState) => JSON.stringify(Object.fromEntries(Object.entries(s).filter(([k, v]) => typeof v !== 'function' && !STRIP.includes(k as keyof FlowState))));
 
-export const DEMO_VERSION = 11;
+export const DEMO_VERSION = 15;
 
 /* ================================================================== */
 /* Store                                                               */
@@ -569,7 +643,7 @@ export const useDemo = create<DemoState>()(
             tna: { ...s.tna, recommendation: competency ? 'accepted' : s.tna.recommendation, gap: competency, survey, idpIds, why },
             draft: { ...s.draft, title: s.draft.title || TRAINING.title, justification: keepTyped ? s.draft.justification : why, participantIds: ids, sources },
           });
-          if (competency && !s.audit.some((a) => a.action === 'AI recommendation accepted')) log('division_head', 'AI recommendation accepted', `${TRAINING.title} · reviewed by ${PERSONAS.division_head.name}`, { next: 'Training request' });
+          if (competency && !s.audit.some((a) => a.action === 'Training need added')) log('division_head', 'Training need added', `${TRAINING.title} · reviewed by ${PERSONAS.division_head.name}`, { next: 'Training request' });
           get().confirmNeed();
         },
         confirmNeed: () => {
@@ -714,6 +788,16 @@ export const useDemo = create<DemoState>()(
           const n = get().courseModules.length || 4;
           set((s) => ({ tcourse: { started: true, done: Math.min(n, s.tcourse.done + 1) } }));
           log('employee', 'Module completed', `Ayesha Rahman · ${TRAINING.title} · module ${get().tcourse.done} of ${n}`);
+        },
+        checkConflicts: () => {
+          if (once('conflictsChecked')) return;
+          set({ conflictsChecked: true });
+          log('hr', 'Conflict checks run', `${get().nominatedCount} nominees checked against HRIS, leave, Outlook calendar and the training database (simulated) · 4 need attention`);
+        },
+        syncRecords: () => {
+          if (once('recordSynced')) return;
+          set({ recordSynced: true });
+          log('hr', 'Learning records updated', `${TRAINING.title} · attendance, 16 learning hours and feedback written to every participant's record and the training database`);
         },
         submitAssessment: () => {
           if (once('ptaSubmitted')) return;
@@ -1015,6 +1099,7 @@ export const useDemo = create<DemoState>()(
           if (!s.reviewed) return get().reviewRequest();
           if (!s.nominationRequested) return get().sendNomination();
           if (!s.nominationSubmitted) return get().submitNominations();
+          if (!s.conflictsChecked) return get().checkConflicts();
           if (!s.finalized && Object.keys(s.resolutions).length === 0) { CONFLICT_IDS.forEach((id) => get().resolve(id, id === 'e2' ? 'keep' : 'remove', id === 'e2' ? 'Leave is one day only; supervisor to confirm' : 'Conflict confirmed')); return; }
           if (!s.finalized) return get().finalize();
           if (!s.scheduled) return get().publishSchedule();
@@ -1038,19 +1123,122 @@ export const useDemo = create<DemoState>()(
           }
           if (!s.ptaSubmitted) return get().submitAssessment();
           if (!s.pta.released) {
+            if (get().pta.integrity === 'pending') get().decideAttempt('pta-e1', 'cleared', 'Events explained by the candidate; no integrity concern.');
             if (get().pta.decision === 'pending') get().decideScore('accepted', 7, '');
             return get().releaseResult('Instant');
           }
           if (!s.feedbackSubmitted) return get().submitFeedback();
           if (!s.completed) return get().complete();
+          if (!s.recordSynced) return get().syncRecords();
           if (!s.execViewed) return get().viewExec();
         },
-        reset: () => set({ ...initial, tour: get().tour, showFr: get().showFr, presenter: get().presenter, handoffTarget: get().handoffTarget, toast: 'Demo reset to the start' }),
+        reset: () => set({ ...initial, tour: get().tour, showFr: get().showFr, presenter: get().presenter, lang: get().lang, handoffTarget: get().handoffTarget, toast: 'Demo reset to the start' }),
         dismissToast: () => set({ toast: null, undo: null }),
         clearImpact: () => set({ impact: null }),
         setTour: (v) => set({ tour: v }),
         setShowFr: (v) => set({ showFr: v }),
         setPresenter: (v) => set({ presenter: v }),
+        setLang: (v) => set({ lang: v }),
+        viewCourse: (id) => set((s) => ({ learn: { ...s.learn, lastViewed: id } })),
+        decideMc: (id, decision) => {
+          const item = get().admin.mc.find((m) => m.id === id);
+          if (!item) return;
+          const checker = PERSONAS.admin.name;
+          let users = get().admin.users;
+          let perms = get().admin.perms;
+          if (decision === 'Approved' && item.apply?.kind === 'role') users = users.map((u) => (u.eid === item.apply!.eid ? { ...u, role: item.apply!.role as UserRow['role'] } : u));
+          if (decision === 'Approved' && item.apply?.kind === 'perm') perms = { ...perms, [item.apply.role!]: perms[item.apply.role!].map((v, i) => (i === item.apply!.index ? !v : v)) };
+          set((s) => ({ admin: { ...s.admin, users, perms, mc: s.admin.mc.map((m) => (m.id === id ? { ...m, status: decision, checker } : m)) }, toast: `${item.type}: ${decision.toLowerCase()} by the checker` }));
+          log('admin', decision === 'Approved' ? 'Maker-checker approved' : 'Maker-checker rejected', `${item.type} · maker ${item.maker} · checker ${checker}`, { approvedBy: checker });
+        },
+        proposePermission: (role, index, moduleName) => {
+          const cur = get().admin.perms[role]?.[index];
+          const mc: MakerCheck = { id: `mc${Date.now()}`, type: 'Permission change', maker: `${PERSONAS.admin.name} (System Admin)`, summary: `${role}: ${cur ? 'remove' : 'grant'} “${moduleName}”`, status: 'Pending', apply: { kind: 'perm', role, index } };
+          set((s) => ({ admin: { ...s.admin, mc: [mc, ...s.admin.mc] }, toast: 'Change sent to the maker-checker queue. A second administrator must approve it.' }));
+          log('admin', 'Permission change requested', mc.summary);
+        },
+        proposeRole: (eid, role) => {
+          const u = get().admin.users.find((x) => x.eid === eid);
+          const mc: MakerCheck = { id: `mc${Date.now()}`, type: 'Role change', maker: `${PERSONAS.admin.name} (System Admin)`, summary: `${eid} ${u?.name}: ${u?.role} → ${role}`, status: 'Pending', apply: { kind: 'role', eid, role } };
+          set((s) => ({ admin: { ...s.admin, mc: [mc, ...s.admin.mc] }, toast: 'Role change sent for checker approval' }));
+          log('admin', 'Role change requested', mc.summary);
+        },
+        setUserStatus: (eid, status) => {
+          set((s) => ({ admin: { ...s.admin, users: s.admin.users.map((u) => (u.eid === eid ? { ...u, status } : u)) }, toast: `Account ${status.toLowerCase()}` }));
+          log('admin', `Account ${status.toLowerCase()}`, eid);
+        },
+        saveSettings: (x) => {
+          set((s) => ({ admin: { ...s.admin, settings: x }, lang: x.language === 'Bangla' ? 'bn' : 'en', toast: 'System settings saved' }));
+          log('admin', 'System settings changed', `Idle timeout ${x.idleTimeout} min · SSO + MFA ${x.ssoMfa ? 'on' : 'off'} · maker-checker ${x.makerChecker ? 'on' : 'off'} · default language ${x.language}`);
+        },
+        syncIntegration: (system) => {
+          set((s) => ({ admin: { ...s.admin, synced: { ...s.admin.synced, [system]: 'Just now' } }, toast: `${system} synced (simulated)` }));
+          log('admin', 'Integration sync', `${system} · manual sync (simulated)`);
+        },
+        startAttempt: (examId) => {
+          const s0 = get();
+          const empId = s0.employeeId;
+          const id = `${examId.toLowerCase()}-${empId}`;
+          const prev = s0.attempts[id];
+          if (prev && !prev.submitted) return id;
+          set((s) => ({ attempts: { ...s.attempts, [id]: { id, examId, empId, name: nameOf(empId), started: examId === 'PTA' ? '20 Nov 2026, 10:00' : '30 Nov 2026, 10:00', answers: {}, flagged: [], events: [], submitted: false, score: null, total: 0, faceMatch: 96, decision: 'pending', reason: '' } } }));
+          if (examId === 'EX007') get().setExam('in_progress');
+          log('employee', 'Secure exam started', `${examId} · ${nameOf(empId)} · identity matched 96% to the Employee ID photo (simulated)`);
+          return id;
+        },
+        saveAttempt: (id, patch) => set((s) => ({ attempts: { ...s.attempts, [id]: { ...s.attempts[id], ...patch } } })),
+        submitAttempt: (id, score, total) => {
+          const a = get().attempts[id];
+          if (!a) return;
+          const have = new Set(a.events.map((e) => e.t));
+          const events = [...a.events, ...PROCTOR_SCRIPT.filter((e) => !have.has(e.t)).slice(0, 4).map((e) => ({ ...e }))].sort((x, y) => x.t - y.t);
+          set((s) => ({ attempts: { ...s.attempts, [id]: { ...a, events, submitted: true, score, total } } }));
+          if (a.examId === 'EX007') get().setExam('submitted');
+          log('employee', 'Secure exam submitted', `${a.examId} · ${a.name} · ${events.length} proctoring events for human review`);
+        },
+        markEvent: (id, index, mark) => set((s) => {
+          const a = s.attempts[id];
+          return { attempts: { ...s.attempts, [id]: { ...a, events: a.events.map((e, i) => (i === index ? { ...e, mark } : e)) } } };
+        }),
+        decideAttempt: (id, decision, reason) => {
+          const a = get().attempts[id];
+          set((s) => ({ attempts: { ...s.attempts, [id]: { ...s.attempts[id], decision, reason } } }));
+          if (a?.examId === 'PTA') get().setIntegrity(decision === 'cleared' ? 'cleared' : 'flagged', reason);
+          else if (a?.examId === 'EX007') get().setProctor(decision === 'cleared' ? 'Cleared' : 'Flagged');
+          else log('trainer', decision === 'cleared' ? 'Integrity review cleared' : decision === 'flagged' ? 'Integrity review flagged' : 'Result withheld for committee', `${a?.examId} · ${a?.name} · ${reason}`);
+        },
+        publishExam: (e, draft) => {
+          set((s) => ({ customExams: [e, ...s.customExams.filter((x) => x.id !== e.id)], toast: draft ? 'Exam saved as draft' : 'Exam published · candidates notified (simulated)' }));
+          log(get().role === 'trainer' ? 'trainer' : 'hr', draft ? 'Exam saved as draft' : 'Exam published', `${e.title} · ${e.duration} min · pass ${e.passMark}%${e.proctored ? ' · proctored' : ''}`);
+        },
+        addQuestion: (q) => {
+          set((s) => ({ customQuestions: [q, ...s.customQuestions], toast: 'Question added to the bank' }));
+          log(get().role === 'trainer' ? 'trainer' : 'hr', 'Question added to the bank', `${q.id} · ${q.type} · ${q.topic}`);
+        },
+        toggleBookmark: (id) => set((s) => {
+          const on = s.learn.bookmarks.includes(id);
+          return { learn: { ...s.learn, bookmarks: on ? s.learn.bookmarks.filter((x) => x !== id) : [...s.learn.bookmarks, id] }, toast: on ? 'Bookmark removed' : 'Bookmarked' };
+        }),
+        toggleDownload: (id, title) => set((s) => {
+          const on = s.learn.downloads.some((d) => d.id === id);
+          return { learn: { ...s.learn, downloads: on ? s.learn.downloads.filter((d) => d.id !== id) : [...s.learn.downloads, { id, title, size: '42 MB', until: '30 Dec 2026' }] }, toast: on ? 'Removed from offline' : 'Saved for offline (simulated, encrypted on device)' };
+        }),
+        addGoal: (g) => {
+          set((s) => ({ learn: { ...s.learn, goals: [...s.learn.goals, { ...g, id: `g${Date.now()}` }] }, toast: 'Goal added' }));
+          log('employee', 'Learning goal set', `${g.title} · by ${g.target}`);
+        },
+        postForum: (course, text) => {
+          const who = get().employeeId;
+          set((s) => ({ learn: { ...s.learn, forum: [{ id: `f${Date.now()}`, course, author: nameOf(who), role: 'Employee', at: 'Just now', text, replies: [] }, ...s.learn.forum] }, toast: 'Question posted' }));
+          log('employee', 'Forum question posted', `${course} · ${text.slice(0, 60)}`);
+        },
+        replyForum: (postId, text) => {
+          const s0 = get();
+          const trainer = s0.role === 'trainer';
+          const author = trainer ? PERSONAS.trainer.name : nameOf(s0.employeeId);
+          set((s) => ({ learn: { ...s.learn, extraPoints: s.learn.extraPoints + (trainer ? 0 : 20), forum: s.learn.forum.map((f) => (f.id === postId ? { ...f, replies: [...f.replies, { author, role: trainer ? 'Trainer' : 'Employee', at: 'Just now', text, trainer }] } : f)) }, toast: 'Reply posted' }));
+          log(trainer ? 'trainer' : 'employee', 'Forum reply posted', text.slice(0, 60));
+        },
         setStoryStep: (n) => set({ storyStep: n }),
       };
     },

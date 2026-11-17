@@ -46,7 +46,7 @@ const AI: ModuleKey = 'AI-assisted';
 
 export const COVERAGE: CovEntry[] = [
   // Roles (FR 1–21)
-  e(1, 1, EW, 'My Learning', '/employee', 'Demonstrated', 'Any invited employee can choose Withdrawn Request with a required reason.', 'Email (simulated)'),
+  e(1, 1, EW, 'My Learning', '/employee', 'Demonstrated', 'Any invited employee can choose Withdraw Request with a required reason.', 'Email (simulated)'),
   e(2, 2, EW, 'My Learning', '/employee', 'Partially demonstrated', 'Upcoming trainings are listed on My Learning; a month calendar view is not built.', 'Outlook calendar sync'),
   e(3, 3, EW, 'My Learning', '/employee', 'Demonstrated', 'Self-marked attendance shows on the HR register with the source "Self".'),
   e(4, 4, EW, 'Training Feedback', '/employee/feedback', 'Demonstrated', 'Ratings and comment, then a forward action.'),
@@ -66,7 +66,7 @@ export const COVERAGE: CovEntry[] = [
   e(18, 18, EW, 'My work (Trainer)', '/r/trainer', 'Partially demonstrated', 'Sessions and a "Today" to-do list; no month calendar view.'),
   e(19, 19, EW, 'Trainer Sessions · Approvals', '/trainer', 'Demonstrated', 'Trainer uploads; HR links the material with a protection option.'),
   e(20, 20, EW, '—', '', 'Proposed interpretation', 'Blank row in Annexure-II; no requirement text.', 'City Bank clarification', KO),
-  e(21, 21, EW, 'Users, Roles & Security', '/admin/security', 'Conceptual', 'Role and access overview only; user and option management is not built.', 'IAM / Active Directory'),
+  e(21, 21, EW, 'System administration', '/admin/roles', 'Demonstrated', 'Role × module permission matrix, users and accounts, maker-checker queue (proposed), audit log and system settings (proposed); changes stay in the demo.', 'IAM / Active Directory'),
   // Setup options (FR 22–48), feeding the TMS
   e(22, 27, TMS, 'Setup Options', '/hr/setup', 'Partially demonstrated', 'Master values are listed and used by the forms; add, edit and archive are deferred.'),
   e(28, 33, TMS, 'Setup Options', '/hr/setup', 'Partially demonstrated', 'The duplicate-check search works; Add does not save a new entry yet.'),
@@ -88,7 +88,7 @@ export const COVERAGE: CovEntry[] = [
   e(89, 91, TMS, 'Training Nomination Status', '/hr/nomination-status', 'Demonstrated', 'Details opens the editable summary; flagged nominees are kept or removed with a reason.'),
   e(92, 115, TMS, 'Training Scheduling', '/hr/schedule', 'Demonstrated', 'Both Load Training Profile paths; venue clash against the demo calendar.'),
   e(116, 118, TMS, 'Training Scheduling · Notification', '/hr/schedule?tab=Notifications', 'Demonstrated', 'Each send updates the record; email delivery is simulated.', 'Outlook / Microsoft 365 (simulated)'),
-  e(119, 119, TMS, 'My Learning · Withdrawal Requests · Approvals', '/employee', 'Demonstrated', 'Accept / Withdrawn Request, supervisor decision with replacement, HR approval; mails are previewed, not sent.', 'Email (simulated)'),
+  e(119, 119, TMS, 'My Learning · Withdrawal Requests · Approvals', '/employee', 'Demonstrated', 'Accept / Withdraw Request, supervisor decision with replacement, HR approval; mails are previewed, not sent.', 'Email (simulated)'),
   e(120, 120, TMS, 'Training Scheduling · Notification', '/hr/schedule?tab=Notifications', 'Simulated', 'SMS and WhatsApp notifications are simulated.', 'SMS gateway, WhatsApp Business API', IT),
   e(121, 131, TMS, 'Training Scheduling', '/hr/schedule', 'Demonstrated', 'Feedback template load and the Training Bond pop-up with a Legal-page print view.'),
   e(132, 136, TMS, 'Planned Training', '/hr/planned', 'Demonstrated', 'View and Edit, mandatory budget fields, Reschedule / Postpone / Delete with email preview.'),
@@ -125,24 +125,24 @@ export const COVERAGE: CovEntry[] = [
   e(200, 201, LMS, 'Course Enrolments', '/hr/courses', 'Partially demonstrated', 'Enrolments, overdue learners and Send reminder; bulk enrolment upload is not built.', 'Email / SMS (simulated)'),
   e(202, 203, LMS, 'e-Learning Course', '/learning/course', 'Missing', 'No version control, global search or course filters.', 'None', P2),
   e(204, 204, LMS, 'e-Learning Course', '/learning/course', 'Conceptual', 'Deep links are not demonstrated.', 'IAM / SSO'),
-  e(205, 205, LMS, 'My Learning', '/employee', 'Partially demonstrated', 'Invitation, course status and record; bookmarks, forum and goals are not built.'),
+  e(205, 205, LMS, 'My Learning · Learning hub', '/learning/hub', 'Demonstrated', 'Progress, last viewed course, bookmarks, offline downloads, discussion forum, learning goals, exams and results, certificates, calendar, points, badges and leaderboard (fictional data).'),
   e(206, 206, LMS, 'Team Dashboard', '/supervisor/team', 'Demonstrated', 'Reportees’ progress, absence, non-completion and assessment results.'),
   e(207, 207, LMS, 'Reports', '/reports', 'Partially demonstrated', 'Course completion and assessment results by period; branch-wise reports are not built.'),
-  e(208, 208, LMS, 'Executive Insight', '/executive', 'Partially demonstrated', 'Training, e-learning and assessment views; exam and feedback analytics are limited.'),
+  e(208, 208, LMS, 'Role dashboards and Reports', '/reports?type=investment', 'Demonstrated', 'Separate dashboards per role plus investment, e-learning and exam, feedback sentiment and bond analytics (fictional bank data).'),
   e(209, 209, AI, 'Home · Training needs', '/overview', 'Simulated', 'Mandatory-learning risk and the division skill gap are flagged from records by rules; forecasting is not modelled.', 'AI model and data governance (on-premise)', P2, true),
   // LMS: assessment (FR 210–220)
   e(210, 210, LMS, 'AML Assessment (standalone)', '/assessment', 'Partially demonstrated', 'The exam opens from My Learning; link access is not shown.'),
-  e(211, 212, LMS, 'AML Assessment (standalone)', '/assessment', 'Partially demonstrated', 'MCQ and descriptive questions; configuration is read-only.'),
+  e(211, 212, LMS, 'Exam builder · secure exam · evidence review', '/assessment/new', 'Demonstrated', 'Nine question types, exam configuration and proctoring controls; secure exam with webcam, face match, tab-switch, copy-paste and gaze / head-pose events (simulated) and a human evidence review.', 'Proctoring engine (simulated)', NOW, true),
   e(213, 213, LMS, 'Post-training Assessment Review', '/assessment/review', 'Demonstrated', 'Automatic marking plus an AI-suggested score that the trainer accepts or adjusts with a reason.', 'AI model (simulated)', NOW, true),
   e(214, 214, LMS, 'Post-training Assessment Review', '/assessment/review', 'Demonstrated', 'Instant or scheduled release with grades.'),
-  e(215, 216, LMS, 'AML Assessment (standalone)', '/assessment', 'Conceptual', 'No question pull rules or question bank management.', 'None', P2),
+  e(215, 216, LMS, 'Question bank', '/assessment?tab=bank', 'Demonstrated', 'Question bank with type, topic and difficulty filters, add question and bulk upload (simulated); random pick in the exam builder.'),
   e(217, 217, LMS, 'Assessment Results', '/assessment/results', 'Partially demonstrated', 'The exam is tagged to the scheduled training with participation and results; editing the exam is not built.'),
-  e(218, 220, LMS, 'AML Assessment (standalone)', '/assessment', 'Conceptual', 'Exam reminders, top-scorer gallery and multi-exam averaging are not built.', 'None', P3),
+  e(218, 220, LMS, 'Leaderboard · exam builder', '/learning/hub?tab=leaderboard', 'Partially demonstrated', 'Top-scorer gallery with star and the several-exams-in-a-month rule (highest, average, latest); exam reminders are templates only.', 'None', P2),
   // LMS: feedback / survey (FR 221–226)
   e(221, 221, LMS, 'Training Feedback', '/employee/feedback', 'Conceptual', 'Link access is not shown.'),
   e(222, 223, LMS, 'Training Feedback', '/employee/feedback', 'Partially demonstrated', 'Post-training feedback with star ratings; other feedback and question types are not built.'),
   e(224, 224, LMS, 'Training Feedback', '/employee/feedback', 'Simulated', 'Feedback requests by email, SMS and WhatsApp are simulated.', 'Email / SMS / WhatsApp', IT),
-  e(225, 225, LMS, 'Reports', '/reports', 'Partially demonstrated', 'Feedback report with CSV; charts and trainer comparison are limited.'),
+  e(225, 225, LMS, 'Feedback & sentiment', '/feedback?tab=analytics', 'Demonstrated', 'Feedback export, trainer comparison, trend and pie charts (fictional data).'),
   e(226, 226, AI, 'Planned Training · feedback themes', '/hr/planned', 'Partially demonstrated', 'AI-suggested themes reviewed by L&D; no live model.', 'AI model (on-premise)', P2, true),
   // LMS: Knowledge Corner and library (FR 227–240)
   e(227, 227, LMS, 'Knowledge Corner', '/knowledge', 'Partially demonstrated', 'Protection options are shown on linked trainer material.'),
@@ -155,7 +155,7 @@ export const COVERAGE: CovEntry[] = [
   e(238, 238, LMS, 'Physical Library', '/library', 'Partially demonstrated', 'The employee request changes local state only; no HR approval.'),
   e(239, 240, LMS, 'Physical Library', '/library', 'Missing', 'No library reports.', 'None', P3),
   // L&D management: competency (FR 241–243)
-  e(241, 242, LD, 'Competency Profile', '/competency', 'Conceptual', 'Profile and levels are shown; no framework or competency assessment setup.', 'None', P2),
+  e(241, 242, LD, 'Competency', '/competency', 'Demonstrated', 'Six-pillar radar per person, gaps with recommended courses, self and manager review with weighting, and framework setup (fictional data).'),
   e(243, 243, LD, 'Learning Journey', '/journey', 'Demonstrated', 'Milestones update competency progress.'),
   // Platform (FR 244–250)
   e(244, 244, EW, 'Integrations', '/admin/integrations', 'Dependent on Bank integration', 'Every integration is simulated in the demo.', 'HRIS, Leave, Meeting Room, Teams / Zoom, Outlook, SMS, WhatsApp, Power BI, SIEM', IT),

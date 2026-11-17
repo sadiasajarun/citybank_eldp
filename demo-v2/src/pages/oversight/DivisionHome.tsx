@@ -14,6 +14,7 @@ import { inPeriod, isDone, PERIODS, personRows, trainingRecords, useDrill } from
 import { TaskList } from './Dashboards';
 import { greeting, NeedCard } from '../Command';
 import { requestLog } from './requests';
+import { DivisionInsight } from './RoleInsights';
 
 const TARGET_ROLES = ['Relationship Manager', 'Credit Analyst', 'Senior Credit Analyst', 'Senior Officer', 'Officer, Credit Risk'];
 
@@ -104,6 +105,8 @@ export function DivisionHome() {
           </li>
         ))}
       </ul>
+
+      <DivisionInsight />
 
       {hasTasks && <div className="mt-8"><TaskList role="division_head" /></div>}
 

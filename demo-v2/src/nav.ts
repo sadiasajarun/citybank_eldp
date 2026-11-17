@@ -41,7 +41,8 @@ export const PAGE_NAME: [string, string][] = [
   ['/learning/course', 'e-Learning Course'],
   ['/assessment/review', 'Post-training Assessment Review'],
   ['/assessment/results', 'Assessment Results'],
-  ['/assessment', 'AML Assessment (standalone)'],
+  ['/assessment', 'Assessments & exams'],
+  ['/assessment/aml', 'AML Assessment (standalone)'],
   ['/competency', 'Competency Profile'],
   ['/journey', 'Learning Journey'],
   ['/tna', 'Training Needs Assessment'],
@@ -81,14 +82,16 @@ export const WORK_NAV: Record<Role, NavGroup[]> = {
     ] },
     { label: 'Setup and reporting', items: [
       { label: 'Setup masters', to: '/hr/setup', fr: 'FR 22–48' },
+      { label: 'e-Learning courses', to: '/learning/hub?tab=manage', fr: 'FR 190–200' },
       { label: 'Reports', to: '/reports', fr: 'FR 175–185' },
       { label: 'Feedback setup', to: '/hr/setup?tab=feedback', fr: 'FR 45–46, 122–125' },
+      { label: 'Feedback & sentiment', to: '/feedback?tab=analytics', fr: 'FR 225–226' },
       { label: 'Training calendar', to: '/hr/calendar', fr: 'FR 43–44, 182' },
     ] },
     { label: 'System', items: [
       { label: 'Integrations', to: '/admin/integrations', fr: 'FR 244' },
-      { label: 'Audit', to: '/admin/audit', fr: 'FR 21' },
-      { label: 'Security', to: '/admin/security', fr: 'FR 21' },
+      { label: 'Audit', to: '/admin/maker-checker', fr: 'FR 21' },
+      { label: 'Security', to: '/admin/roles', fr: 'FR 21' },
     ] },
   ],
   division_head: [
@@ -114,6 +117,7 @@ export const WORK_NAV: Record<Role, NavGroup[]> = {
       { label: 'My sessions', to: '/trainer', fr: 'FR 16–19', status: (s) => (s.invitesSent && s.trainerResponse === 'pending' ? st('Respond', 'new') : s.trainerResponse === 'accepted' ? st('Confirmed', 'done') : null) },
     ] },
     { label: 'Trainer operations', items: [
+      { label: 'Course management', to: '/learning/hub?tab=manage', fr: 'FR 190–200' },
       { label: 'Course setup', to: '/trainer/course-setup', fr: 'FR 19, 190–198, 210', status: (s) => (s.courseSetup ? st('Ready', 'done') : s.trainerResponse === 'accepted' ? st('To do', 'new') : null) },
       { label: 'Materials', to: '/trainer?s=materials', fr: 'FR 19', status: (s) => (s.materialLinked ? st('Linked', 'done') : s.materialLinkRequested ? st('With HR', 'waiting') : s.materialUploaded ? st('Request link', 'new') : null) },
       { label: 'Assessments', to: '/assessment', fr: 'FR 210–213, 247' },
@@ -125,10 +129,11 @@ export const WORK_NAV: Record<Role, NavGroup[]> = {
       { label: 'My calendar', to: '/employee?s=calendar', fr: 'FR 2' },
     ] },
     { label: 'My learning', items: [
+      { label: 'Learning hub', to: '/learning/hub', fr: 'FR 190–205' },
       { label: 'Courses', to: '/learning/training', fr: 'FR 190–198' },
       { label: 'Training', to: '/employee', fr: 'FR 1–3, 119' },
       { label: 'Assessments', to: '/assessment', fr: 'FR 210–220' },
-      { label: 'Feedback', to: '/employee/feedback', fr: 'FR 4, 221–226' },
+      { label: 'Feedback', to: '/feedback', fr: 'FR 4, 221–226' },
       { label: 'Certificates', to: '/employee/certificates', fr: 'FR 198' },
     ] },
     { label: 'My development', items: [
@@ -146,11 +151,17 @@ export const WORK_NAV: Record<Role, NavGroup[]> = {
     ] },
   ],
   admin: [
-    { label: 'Platform', items: [
-      { label: 'Users, Roles & Security', to: '/admin/security', fr: 'FR 21 · proposed architecture' },
-      { label: 'Integrations', to: '/admin/integrations', fr: 'FR 244' },
-      { label: 'Audit Trail', to: '/admin/audit', fr: 'FR 248–249 · proposed' },
+    { label: 'Administration', items: [
+      { label: 'Roles & permissions', to: '/admin/roles', fr: 'FR 21' },
+      { label: 'Users & accounts', to: '/admin/users', fr: 'FR 21, 200' },
+      { label: 'Maker-checker & audit log', to: '/admin/maker-checker', fr: 'FR 248–249 · proposed', status: (s) => { const n = s.admin.mc.filter((m) => m.status === 'Pending').length; return n ? st(`${n} pending`, 'new') : null; } },
+      { label: 'Integrations & SSO / SIEM', to: '/admin/integrations', fr: 'FR 244' },
+      { label: 'System settings', to: '/admin/settings', fr: 'FR 248–249 · proposed' },
+    ] },
+    { label: 'Platform setup', items: [
+      { label: 'Global master setup', to: '/hr/setup', fr: 'FR 22–48' },
       { label: 'Training Database', to: '/hr/training-db', fr: 'FR 169, 173' },
+      { label: 'Reports', to: '/reports', fr: 'FR 175–185' },
     ] },
   ],
   management: [
@@ -164,13 +175,13 @@ export const WORK_NAV: Record<Role, NavGroup[]> = {
 
 /** Pages each role may open without switching (its own pages + inherited, FR 8, 13, 16). */
 export const ENTITLED: Record<Role, string[]> = {
-  employee: ['/employee', '/learning', '/assessment', '/journey', '/knowledge', '/library', '/competency', '/mobile'],
+  employee: ['/employee', '/feedback', '/learning', '/assessment', '/journey', '/knowledge', '/library', '/competency', '/mobile'],
   supervisor: ['/supervisor', '/employee', '/learning', '/journey', '/reports'],
   division_head: ['/division', '/request', '/nominate', '/supervisor/team', '/reports', '/employee', '/learning', '/journey', '/tna'],
-  trainer: ['/trainer', '/assessment', '/employee', '/learning', '/knowledge'],
-  hr: ['/hr/', '/reports', '/tna', '/assessment/results', '/learning', '/competency', '/people', '/admin/integrations', '/admin/audit', '/admin/security'],
+  trainer: ['/trainer', '/feedback', '/competency', '/assessment', '/employee', '/learning', '/knowledge'],
+  hr: ['/hr/', '/feedback', '/reports', '/tna', '/assessment/results', '/learning', '/competency', '/people', '/admin/integrations', '/admin/maker-checker', '/admin/roles', '/admin/audit', '/admin/security'],
   finance: ['/finance', '/reports'],
-  admin: ['/admin', '/hr/training-db', '/hr/attendance', '/coverage'],
+  admin: ['/admin', '/hr/training-db', '/hr/attendance', '/coverage', '/hr/setup', '/learning', '/reports'],
   management: ['/executive', '/reports', '/people', '/competency'],
 };
 

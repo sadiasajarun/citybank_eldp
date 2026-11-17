@@ -19,7 +19,7 @@
   --color-warn-soft: #fcf2e0;
   --color-info: #1d4ed8;
   --color-info-soft: #e8eefe;
-  --font-sans: 'Inter', 'Segoe UI Variable', 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+  --font-sans: 'Inter', 'Segoe UI Variable', 'Segoe UI', 'Noto Sans Bengali', 'Nirmala UI', 'Vrinda', system-ui, -apple-system, Roboto, sans-serif;
 }
 
 html, body, #root { height: 100%; }

@@ -301,7 +301,7 @@ export function Scheduling() {
                     <span className="inline-flex items-center gap-2 rounded-lg border border-line px-3 py-1.5 text-[15px]"><FileText size={16} className="text-ink-3" />Participant_List_{T_ID}.pdf · {r.length} names</span>
                     <Btn v="link" icon={<Download size={16} />} onClick={() => downloadCsv(`participants_${T_ID}.csv`, ['EID', 'Name', 'Designation', 'Division', 'Supervisor'], r.map((e) => [e.eid, e.name, e.role, e.division, e.supervisor]))}>Download the list</Btn>
                   </div>
-                  <p className="text-[16px] text-ink-2">Each invitation includes a link to <b>Accept</b> or choose <b>Withdrawn Request</b> with a reason, which starts the withdrawal process (FR 119).</p>
+                  <p className="text-[16px] text-ink-2">Each invitation includes a link to <b>Accept</b> or choose <b>Withdraw Request</b> with a reason, which starts the withdrawal process (FR 119).</p>
                   <EmailTemplate subject={`Training invitation: ${TRAINING.title}, 18–19 Nov 2026`} body={`Dear {Participant name},\n\nYou are invited to ${TRAINING.title} on 18–19 Nov 2026, 09:30–17:30, City Bank Learning Center, Hall A.\nThe participant list is attached (PDF). Your supervisor is copied.\n\nAccept or request withdrawal: https://eldp.thecitybank.com/i/{invitation link}\n\nRegards,\nNusrat Jahan, HR Admin (L&D)`} />
                 </div>
               </div>
@@ -410,7 +410,7 @@ export function Scheduling() {
         footer={<><Btn v="secondary" onClick={() => setSendConfirm(false)}>Cancel</Btn><Btn onClick={() => { setSendConfirm(false); s.sendInvites(); }}>Send to {r.length} participants</Btn></>}>
         <p className="text-[16px]">These recipients get the invitation with the calendar event:</p>
         <ul className="mt-3 list-disc space-y-1 pl-5 text-[16px] text-ink-2">
-          <li><b>{r.length} participants</b>, each with an Accept / Withdrawn Request link</li>
+          <li><b>{r.length} participants</b>, each with an Accept / Withdraw Request link</li>
           <li><b>{supervisors.length} supervisors</b> in CC ({supervisors.join(', ')})</li>
           {s.sched.extraRecipients.length > 0 && <li>{s.sched.extraRecipients.length} extra recipient{s.sched.extraRecipients.length > 1 ? 's' : ''}: {s.sched.extraRecipients.join(', ')}</li>}
           <li>{s.sched.trainers.length} trainer{s.sched.trainers.length === 1 ? '' : 's'} and the organizer, if not already sent</li>

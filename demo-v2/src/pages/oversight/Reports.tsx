@@ -14,10 +14,15 @@ import { DataTable, downloadCsv, type Column } from '../../components/DataTable'
 import { AiLabel, Badge, Btn, cx, Field, inputCls, Modal } from '../../components/ui';
 import { Bars, inPeriod, isDone, MANDATORY_COURSE, monthLabel, monthOf, pct, PERIODS, personRows, printTable, scopeFor, Select, trainingRecords, type TrainingRecord } from './dash';
 import { programmeRows } from './Dashboards';
+import { BondsReport, ElearningReport, InvestmentReport, ReportKpis, SentimentReport } from './ReportsAnalytics';
 
-type Key = 'employee' | 'division' | 'tag' | 'period' | 'gender' | 'group' | 'feedback' | 'calendar' | 'multi' | 'scheduled' | 'ai';
+type Key = 'investment' | 'elearning' | 'sentiment' | 'bonds' | 'employee' | 'division' | 'tag' | 'period' | 'gender' | 'group' | 'feedback' | 'calendar' | 'multi' | 'scheduled' | 'ai';
 type FilterKey = 'period' | 'division' | 'tag' | 'category';
 const REPORTS: { key: Key; label: string; fr: string; uses: FilterKey[] }[] = [
+  { key: 'investment', label: 'Investment & cost (BDT)', fr: 'FR 135, 142', uses: [] },
+  { key: 'elearning', label: 'e-Learning & exams', fr: 'FR 207–208, 217', uses: [] },
+  { key: 'sentiment', label: 'Feedback & sentiment', fr: 'FR 225–226', uses: [] },
+  { key: 'bonds', label: 'Training bonds', fr: 'FR 164–166', uses: [] },
   { key: 'employee', label: 'Employee-wise', fr: 'FR 175', uses: ['period', 'division', 'tag', 'category'] },
   { key: 'division', label: 'Division / Department / Function-wise', fr: 'FR 176', uses: ['period', 'division', 'tag', 'category'] },
   { key: 'tag', label: 'Tag / label-wise', fr: 'FR 12, 177', uses: ['period', 'division', 'category'] },
@@ -66,7 +71,7 @@ export function ReportsPage() {
     (!uses('category') || category === 'All categories' || r.category === category));
   const people = scope.people.filter((p) => !uses('division') || division === 'All divisions' || p.division === division);
 
-  const out = key === 'scheduled' || key === 'ai' ? null : compute(key, { recs, people, level, tagSet, tagMode, tagsPresent, period, s });
+  const out = ['scheduled', 'ai', 'investment', 'elearning', 'sentiment', 'bonds'].includes(key) ? null : compute(key, { recs, people, level, tagSet, tagMode, tagsPresent, period, s });
   const filterText = [uses('period') && PERIODS.find((p) => p.key === period)?.label, uses('division') && division, uses('tag') && tag, uses('category') && category].filter(Boolean).join(' · ');
   const title = `${rep.label} training report`;
   const header = out?.cols.map((c) => c.header) ?? [];
@@ -80,6 +85,7 @@ export function ReportsPage() {
           <Btn v="secondary" onClick={() => downloadCsv(`${key}-report.csv`, header, flat)}>Download CSV (Excel)</Btn>
           <Btn v="secondary" onClick={() => setPrintBlocked(!printTable(title, `${scope.label}${filterText ? ` · ${filterText}` : ''}`, header, flat))}>Print / Save as PDF</Btn>
         </> : undefined} />
+      {scope.kind === 'bank' && <ReportKpis />}
       {printBlocked && <p className="-mt-4 mb-6 text-[15px] text-warn">The browser blocked the print window. Allow pop-ups for this page and try again.</p>}
 
       <div role="tablist" aria-label="Report type" className="flex flex-wrap gap-2">
@@ -115,6 +121,10 @@ export function ReportsPage() {
         )}
 
         {out && <ReportView key={key} out={out} />}
+        {key === 'investment' && <InvestmentReport />}
+        {key === 'elearning' && <ElearningReport />}
+        {key === 'sentiment' && <SentimentReport />}
+        {key === 'bonds' && <BondsReport />}
         {key === 'scheduled' && <Scheduled />}
         {key === 'ai' && <AiSuggestions division={uses('division') ? division : 'All divisions'} />}
       </Section>

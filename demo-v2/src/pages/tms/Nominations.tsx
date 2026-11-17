@@ -1,6 +1,9 @@
 import { useRef, useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AlertTriangle, ArrowRight, Check } from 'lucide-react';
+import { AlertTriangle, ArrowRight, Building2, Check, ClipboardCheck, Hourglass, Lock, ShieldAlert, Users } from 'lucide-react';
+import { StatCard } from '../../components/Dash';
+
+const STAT_ICONS = [Building2, Users, ClipboardCheck, ShieldAlert, Hourglass, Lock];
 import { CONFLICT_IDS, NOMINEE_LIST, TRAINING } from '../../data';
 import { DIVISIONS, findById, VENDORS, VENUES } from '../../org';
 import { roster, useDemo, type NominationSetup as NomSetup } from '../../store';
@@ -268,6 +271,32 @@ export function NominationStatus() {
     );
   }
 
+  if (!s.conflictsChecked) {
+    const SYS: [string, string][] = [['HRIS', 'Grade, status, retirement date'], ['Leave management', 'Approved leave on 18–19 Nov'], ['Outlook calendar', 'Meetings that clash with the sessions'], ['Training database', 'Overlapping or repeated trainings']];
+    return (
+      <div>
+        {head}
+        {requestTable}
+        <section className="mt-8 rounded-2xl bg-white p-7 ring-1 ring-line">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h2 className="text-[24px] font-bold">{s.nominatedCount} nominations received</h2>
+              <p className="mt-1 text-[16px] text-ink-2">Before HR decides, every nominee is checked against four systems. Nothing is removed automatically.</p>
+            </div>
+            <SourceTag kind="simulated">Integrations simulated</SourceTag>
+          </div>
+          <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+            {SYS.map(([n2, d]) => (
+              <li key={n2} className="flex items-start gap-3 rounded-xl bg-canvas px-4 py-3"><Check size={18} className="mt-0.5 text-ink-3" /><span><b className="text-[16px]">{n2}</b><span className="block text-[15px] text-ink-2">{d}</span></span></li>
+            ))}
+          </ul>
+          <div className="mt-6 flex justify-end"><Btn onClick={() => s.checkConflicts()}>Run conflict checks <ArrowRight size={16} /></Btn></div>
+        </section>
+        {detailsDrawer}
+      </div>
+    );
+  }
+
   /* ---------- stats, computed from the records ---------- */
   const invited = DIVISIONS.filter((d) => n.divisions[d.name]);
   const pendingDivs = invited.filter((d) => !NOMINEE_LIST.some((e) => e.division === d.name));
@@ -310,12 +339,9 @@ export function NominationStatus() {
       {head}
       {requestTable}
 
-      <div className="my-8 flex flex-wrap items-stretch divide-x divide-line border-y border-line">
-        {stats.map(([v, l, c]) => (
-          <div key={l} className="min-w-[150px] flex-1 px-5 py-4 first:pl-0">
-            <div className={cx('text-[30px] font-extrabold leading-none tabular-nums', c)}>{v}</div>
-            <div className="mt-1.5 text-[15px] text-ink-3">{l}</div>
-          </div>
+      <div className="my-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+        {stats.map(([v, l, c], i) => (
+          <StatCard key={l} label={l} value={v} icon={STAT_ICONS[i]} tone={c === 'text-warn' ? 'amber' : c === 'text-ok' ? 'ok' : 'brand'} />
         ))}
       </div>
 

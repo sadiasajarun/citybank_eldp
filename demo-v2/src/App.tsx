@@ -3,9 +3,12 @@ import Shell from './components/Shell';
 import { PlatformMap, WorkflowView } from './pages/Home';
 import { Login } from './pages/Welcome';
 import { CommandCenter } from './pages/Command';
-import { CapabilityProfile, ExamV2 } from './pages/Hero';
+import { ExamV2 } from './pages/Hero';
+import { CompetencyPage } from './pages/competency/Competency';
+import { FeedbackHub } from './pages/feedback/FeedbackHub';
 import { Certificates } from './pages/Learning';
-import { AuditPage, Integrations, Knowledge, LibraryPage, Mobile, Security } from './pages/Platform';
+import { Knowledge, LibraryPage, Mobile } from './pages/Platform';
+import { Administration } from './pages/admin/Administration';
 import { ConnectedBank, SetupMasters } from './pages/Admin';
 // Training Management System (TMS)
 import { TrainingRequest } from './pages/tms/TrainingRequest';
@@ -39,6 +42,12 @@ import { DivisionDashboard, RoleHome, TeamDashboard } from './pages/oversight/Da
 import { RequestDetail } from './pages/oversight/RequestDetail';
 import { Modules } from './pages/Modules';
 import { Intelligence } from './pages/oversight/Intelligence';
+import { LearningHub } from './pages/learning/Hub';
+import { ExamsHub } from './pages/assessment/Exams';
+import { ExamBuilder } from './pages/assessment/ExamBuilder';
+import { TakeExam } from './pages/assessment/TakeExam';
+import { IntegrityReview } from './pages/assessment/Integrity';
+import { GradingSheet } from './pages/assessment/Grading';
 import { CourseSetup } from './pages/decisions/CourseSetup';
 import { TrainingAssessment, TrainingCourse } from './pages/learning/TrainingCourse';
 import { EmployeeRecord, PeopleDirectory } from './pages/PeopleDirectory';
@@ -95,20 +104,28 @@ export default function App() {
           <Route path="/supervisor/team" element={<TeamDashboard />} />
           <Route path="/executive" element={<Intelligence />} />
           {/* Learning & development modules */}
+          <Route path="/learning/hub" element={<LearningHub />} />
           <Route path="/learning/course" element={<CoursePage />} />
-          <Route path="/assessment" element={<ExamV2 />} />
+          <Route path="/assessment" element={<ExamsHub />} />
+          <Route path="/assessment/aml" element={<ExamV2 />} />
+          <Route path="/assessment/new" element={<ExamBuilder />} />
+          <Route path="/assessment/take/:id" element={<TakeExam />} />
+          <Route path="/assessment/integrity/:id" element={<IntegrityReview />} />
+          <Route path="/assessment/grading/:examId" element={<GradingSheet />} />
           <Route path="/assessment/review" element={<AssessmentReview />} />
           <Route path="/assessment/results" element={<AssessmentResults />} />
-          <Route path="/competency" element={<CapabilityProfile />} />
+          <Route path="/competency" element={<CompetencyPage />} />
+          <Route path="/feedback" element={<FeedbackHub />} />
           <Route path="/journey" element={<LearningJourney />} />
           <Route path="/tna" element={<DivisionDashboard />} />
           <Route path="/knowledge" element={<Knowledge />} />
           <Route path="/library" element={<LibraryPage />} />
           <Route path="/mobile" element={<Mobile />} />
           {/* System admin */}
-          <Route path="/admin/integrations" element={<Integrations />} />
-          <Route path="/admin/audit" element={<AuditPage />} />
-          <Route path="/admin/security" element={<Security />} />
+          <Route path="/admin" element={<Administration />} />
+          <Route path="/admin/audit" element={<Navigate to="/admin/maker-checker" replace />} />
+          <Route path="/admin/security" element={<Navigate to="/admin/roles" replace />} />
+          <Route path="/admin/:tab" element={<Administration />} />
         </Route>
         <Route path="*" element={<Navigate to="/overview" replace />} />
       </Routes>

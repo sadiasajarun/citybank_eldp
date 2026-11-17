@@ -1,10 +1,11 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Check, CheckCircle2, Hourglass } from 'lucide-react';
 import { TRAINING } from '../../data';
 import { DIVISIONS, findById } from '../../org';
 import { courseOf, useDemo, type DemoState, type Withdrawal } from '../../store';
-import { NotYet, PersonBanner, ReasonModal } from '../../components/Templates';
+import { PersonBanner, ReasonModal } from '../../components/Templates';
+import { LearnerOverview } from './LearnerDash';
 import { SourceTag } from '../../components/Source';
 import { personaFor } from '../../components/perspective';
 import { Alert, Badge, Btn, cx, Field, inputCls, Modal, Progress } from '../../components/ui';
@@ -87,6 +88,13 @@ function Invitation({ empId, onWithdraw }: { empId: string; onWithdraw: () => vo
   const decided = s.withdrawal.status === 'approved' || s.withdrawal.status === 'rejected';
   const canSelf = part === 'Accepted' && s.invitesSent && s.trainerResponse !== 'pending' && decided && !s.attendanceSubmitted && !s.selfMarked[empId];
   const canWithdraw = (part === 'Invited' || part === 'Accepted') && !s.attendanceSubmitted && !s.selfMarked[empId] && !wd;
+  // The guided-journey step bar can open the withdrawal form directly.
+  useEffect(() => {
+    if (!canWithdraw) return;
+    const h = () => onWithdraw();
+    window.addEventListener('eldp:step-action', h);
+    return () => window.removeEventListener('eldp:step-action', h);
+  }, [canWithdraw, onWithdraw]);
   const why = rep
     ? `Added as a replacement for ${findById(rep.empId)?.name ?? 'a colleague'}: proposed by ${findById(rep.empId)?.supervisor ?? 'the supervisor'}, approved by HR.`
     : s.addedParticipants.includes(empId) ? 'Added to the participant list by HR Admin.'
@@ -107,7 +115,7 @@ function Invitation({ empId, onWithdraw }: { empId: string; onWithdraw: () => vo
   let footer: React.ReactNode = null;
   let state: React.ReactNode = null;
   if (part === 'Invited') {
-    footer = <>{canWithdraw && <Btn v="secondary" onClick={onWithdraw}>Withdrawn Request</Btn>}<span className="flex-1" /><Btn size="lg" onClick={() => s.accept(empId)}>Accept</Btn></>;
+    footer = <>{canWithdraw && <Btn v="secondary" onClick={onWithdraw}>Withdraw Request</Btn>}<span className="flex-1" /><Btn size="lg" onClick={() => s.accept(empId)}>Accept</Btn></>;
   } else if (part === 'Accepted') {
     state = (
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[16px]">
@@ -120,7 +128,7 @@ function Invitation({ empId, onWithdraw }: { empId: string; onWithdraw: () => vo
     );
     footer = (
       <>
-        {canWithdraw && <Btn v="secondary" onClick={onWithdraw}>Withdrawn Request</Btn>}
+        {canWithdraw && <Btn v="secondary" onClick={onWithdraw}>Withdraw Request</Btn>}
         <span className="flex-1" />
         <Btn v="secondary" onClick={toggleCal}>{inCal ? 'Remove from calendar' : 'Add to calendar'}</Btn>
         {s.materialLinked && <Btn v="secondary" onClick={() => nav('/knowledge')}>View material</Btn>}
@@ -215,7 +223,7 @@ export function MyLearning() {
     ...(!course.completed ? [{ key: 'c', day: 20, date: '20 Nov', title: 'Information Security Awareness 2026', detail: `Mandatory · ${course.progress}% complete`, status: 'Course due', tone: 'warn' as Tone, kind: 'Courses' as const, go: () => { nav('/learning/course'); } }] : []),
     ...(isE1 && s.attendanceSubmitted ? [{ key: 'a', day: 20, date: '20 Nov', title: 'Post-training assessment', detail: TRAINING.title, status: s.ptaSubmitted ? 'Submitted' : 'Due', tone: (s.ptaSubmitted ? 'ok' : 'warn') as Tone, kind: 'Exams' as const, go: () => { nav('/learning/training/assessment'); } }] : []),
     ...(part === 'Attended' ? [{ key: 'f', day: 22, date: '22 Nov', title: `Feedback · ${TRAINING.title}`, detail: 'Content, trainer, relevance, logistics', status: s.feedbackSubmitted ? 'Sent' : 'Due', tone: (s.feedbackSubmitted ? 'ok' : 'warn') as Tone, kind: 'Feedback' as const, go: () => { nav('/employee/feedback'); } }] : []),
-    { key: 'e', day: 30, date: '30 Nov', title: 'AML Annual Certification Assessment', detail: 'Online', status: 'Upcoming exam', tone: 'info' as Tone, kind: 'Exams' as const, go: () => { nav('/assessment'); } },
+    { key: 'e', day: 30, date: '30 Nov', title: 'AML Annual Certification Assessment', detail: 'Online', status: 'Upcoming exam', tone: 'info' as Tone, kind: 'Exams' as const, go: () => { nav('/assessment/take/EX007'); } },
   ] as { key: string; day: number; date: string; title: string; detail: string; status: string; tone: Tone; kind: 'Training' | 'Courses' | 'Exams' | 'Feedback'; go: () => void }[]).sort((a, b) => a.day - b.day);
 
   const years = ['All years', ...[...new Set(allRows.map((r) => r.iso.slice(0, 4)))].sort().reverse()];
@@ -251,10 +259,12 @@ export function MyLearning() {
         </dl>
       </header>
 
+      <LearnerOverview empId={empId} upcoming={agenda} />
+
       {/* 1 · the training invitation first */}
       <section id="sec-training" className="scroll-mt-4">
         {part ? <Invitation empId={empId} onWithdraw={() => setWd(true)} /> : !s.invitesSent ? (
-          <NotYet title="No training invitation yet" after="HR sends the training invitations" />
+          <div className={cx(card, 'px-7 py-6')}><div className="text-[20px] font-semibold">No training invitation right now</div><p className="mt-1 text-[16px] text-ink-2">When HR invites you to a training, it appears here with Accept and Withdraw Request. Your courses, exams and learning record are below.</p></div>
         ) : <div className={cx(card, 'px-7 py-6 text-[16px] text-ink-2')}>You are not on a scheduled training right now.</div>}
       </section>
 
@@ -303,7 +313,7 @@ export function MyLearning() {
             </li>
             <li className="flex items-center gap-4 py-3">
               <span className="min-w-0 flex-1"><span className="block text-[16px]">AML Annual Certification</span><span className="block text-[14px] text-ink-3">Proctored exam · opens 30 Nov</span></span>
-              <button onClick={() => nav('/assessment')} className={btn2}>Open</button>
+              <button onClick={() => nav('/assessment/take/EX007')} className={btn2}>Open</button>
             </li>
             <li className="flex items-center gap-4 py-3">
               <span className="min-w-0 flex-1"><span className="block text-[16px]">Certificates</span><span className="block text-[14px] text-ink-3">{k.certificates + (course.completed ? 1 : 0)} issued · QR verified</span></span>
@@ -369,7 +379,7 @@ export function MyLearning() {
 
       <ReasonModal
         open={wd}
-        title="Withdrawn Request"
+        title="Withdraw Request"
         intro={<>Tell your supervisor, <b>{p?.supervisor ?? 'your supervisor'}</b>, why you cannot attend. They approve, approve with a replacement, or reject; HR Admin gives the final decision (FR 119).</>}
         confirm="Send to supervisor"
         suggested={empId === 'e2' ? 'Client meeting scheduled during training.' : 'Branch audit visit on 18 Nov.'}

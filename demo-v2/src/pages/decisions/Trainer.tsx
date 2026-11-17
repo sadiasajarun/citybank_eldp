@@ -9,6 +9,7 @@ import { TRAINING } from '../../data';
 import { attendedIds, ptResults, roster, useDemo, type DemoState } from '../../store';
 import { ReasonModal } from '../../components/Templates';
 import { Badge, cx, Drawer } from '../../components/ui';
+import { TrainerInsight } from '../oversight/RoleInsights';
 import { useSection } from '../../components/useSection';
 
 const ME = 'Nafis Ahmed';
@@ -64,7 +65,7 @@ export function TrainerSessions() {
   if (resp === 'accepted' && !s.materialUploaded) actions.push({ training: TRAINING.title, what: 'Material upload', when: 'Due 16 Nov', status: 'To do', tone: 'warn', why: `Upload ${fileName} for HR to link.`, cta: 'Upload material', go: upload });
   if (s.materialUploaded && !s.materialLinkRequested) actions.push({ training: TRAINING.title, what: 'Material link', when: 'Due 16 Nov', status: 'Not linked', tone: 'warn', why: 'Ask HR Admin to link the uploaded file to the training.', cta: 'Request HR link', go: () => s.requestMaterialLink() });
   if (ptaWaiting) actions.push({ training: TRAINING.title, what: 'Post-training assessment', when: 'Due 20 Nov', status: 'Awaiting review', tone: 'warn', why: 'Check integrity, decide the AI-suggested score, add a note, release.', cta: 'Review assessment', go: () => nav('/assessment/review') });
-  if (amlWaiting) actions.push({ training: 'AML Annual Certification', what: 'Assessment review', when: 'Due 30 Nov', status: 'AI suggested', tone: 'info', why: 'AI has suggested a score. Review the evidence and decide.', cta: 'Review assessment', go: () => nav('/assessment') });
+  if (amlWaiting) actions.push({ training: 'AML Annual Certification', what: 'Assessment review', when: 'Due 30 Nov', status: 'AI suggested', tone: 'info', why: 'AI has suggested a score. Review the evidence and decide.', cta: 'Review assessment', go: () => nav('/assessment/aml') });
 
   const primary = actions[0];
 
@@ -73,7 +74,7 @@ export function TrainerSessions() {
     ...sessions.filter((x) => x.status !== 'Declined').map((x): Agenda => ({ key: x.key, date: x.date, day: x.day, time: x.time, title: x.title, detail: `${x.venue} · ${x.people} participants`, status: x.status, tone: x.tone, kind: 'Sessions', go: () => setOpen(x) })),
     ...(resp === 'accepted' ? [{ key: 'm', date: '16 Nov', day: 16, time: 'Deadline', title: 'Material for HR to link', detail: TRAINING.title, status: s.materialLinked ? 'Linked' : s.materialLinkRequested ? 'With HR' : s.materialUploaded ? 'Request link' : 'To upload', tone: (s.materialLinked ? 'ok' : 'warn') as Tone, kind: 'Material deadlines' as const, go: () => scroll('sec-materials') }] : []),
     ...(s.attendanceSubmitted ? [{ key: 'p', date: '20 Nov', day: 20, time: 'Due', title: 'Post-training assessment', detail: TRAINING.title, status: s.pta.released ? 'Released' : 'Assessment review', tone: (s.pta.released ? 'ok' : 'warn') as Tone, kind: 'Assessments' as const, go: () => nav('/assessment/review') }] : []),
-    { key: 'a', date: '30 Nov', day: 30, time: '10:00', title: 'AML Annual Certification Assessment', detail: 'Online', status: amlWaiting ? 'Assessment review' : 'Decided', tone: (amlWaiting ? 'info' : 'ok') as Tone, kind: 'Assessments' as const, go: () => { nav('/assessment'); } },
+    { key: 'a', date: '30 Nov', day: 30, time: '10:00', title: 'AML Annual Certification Assessment', detail: 'Online', status: amlWaiting ? 'Assessment review' : 'Decided', tone: (amlWaiting ? 'info' : 'ok') as Tone, kind: 'Assessments' as const, go: () => { nav('/assessment/aml'); } },
   ] as Agenda[]).sort((a, b) => a.day - b.day);
   const shown = agenda.filter((x) => filter === 'All' || x.kind === filter);
 
@@ -96,7 +97,7 @@ export function TrainerSessions() {
     {
       exam: 'AML Annual Certification', who: 'Ayesha Rahman', objective: '28 / 30', descriptive: '1 answer', ai: '7 / 10', evidence: 'Correct reporting threshold; escalation steps incomplete',
       decision: amlWaiting ? '—' : `${s.aiScore.score} / 10 · ${s.aiScore.state === 'accepted' ? 'AI score accepted' : 'adjusted'}`,
-      status: amlWaiting ? 'Score to decide' : 'Decided', tone: (amlWaiting ? 'info' : 'ok') as Tone, to: '/assessment', disabled: false,
+      status: amlWaiting ? 'Score to decide' : 'Decided', tone: (amlWaiting ? 'info' : 'ok') as Tone, to: '/assessment/aml', disabled: false,
     },
   ];
 
@@ -133,6 +134,8 @@ export function TrainerSessions() {
           </li>
         ))}
       </ul>
+
+      <TrainerInsight />
 
       <input ref={input} type="file" accept=".pdf,.pptx,.docx,.xlsx" className="sr-only" aria-label="Choose a material file" onChange={(e) => { const f = e.target.files?.[0]; if (f) { setFile(f.name); s.uploadMaterial(); } }} />
 

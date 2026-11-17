@@ -1,5 +1,9 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Award, Building2, FileText, SlidersHorizontal } from 'lucide-react';
+import { StatCard } from '../components/Dash';
+import { EXTERNAL_PARTICIPANTS, FEEDBACK_TEMPLATES, NOTIFICATION_TEMPLATES } from '../seed/bank';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { CalendarSetup, RecordSetup, RECORD_TABS } from './setup/SetupRecords';
 import { ArrowRight } from 'lucide-react';
 import { MASTERS } from '../data';
 import { findByEid, TRAINERS, VENDORS, VENUES } from '../org';
@@ -13,12 +17,10 @@ import { Alert, Badge, Btn, cx, Field, inputCls, Modal, Table, Tabs, Td } from '
 import { Fr, PageTitle } from './Roles';
 
 /* ---------------- Setup Options (FR 22–48) · partially demonstrated ---------------- */
-const SETUP_TABS = ['Competency', 'Tags / Labels', 'Category', 'Mode of Training', 'Training Medium', 'Training Title', 'Venue', 'Trainer', 'Vendor', 'Training Calendar', 'Feedback Setup', 'External Trainee'];
-const SETUP_FR: Record<string, string> = { Competency: 'FR 22', 'Tags / Labels': 'FR 23–24', Category: 'FR 25', 'Mode of Training': 'FR 27', 'Training Medium': 'FR 26', 'Training Title': 'FR 28–30', Venue: 'FR 31–34', Trainer: 'FR 35–37', Vendor: 'FR 38–42', 'Training Calendar': 'FR 43–44', 'Feedback Setup': 'FR 45–46', 'External Trainee': 'FR 47–48' };
+const SETUP_TABS = ['Competency', 'Tags / Labels', 'Category', 'Mode of Training', 'Training Medium', 'Training Title', 'Venue', 'Trainer', 'Vendor', 'Training Calendar', 'Feedback Setup', 'External Trainee', 'Notification Templates'];
+const SETUP_FR: Record<string, string> = { Competency: 'FR 22', 'Tags / Labels': 'FR 23–24', Category: 'FR 25', 'Mode of Training': 'FR 27', 'Training Medium': 'FR 26', 'Training Title': 'FR 28–30', Venue: 'FR 31–34', Trainer: 'FR 35–37', Vendor: 'FR 38–42', 'Training Calendar': 'FR 43–44', 'Feedback Setup': 'FR 45–46', 'External Trainee': 'FR 47–48', 'Notification Templates': 'FR 42, 87, 116–118, 136, 201' };
 const SEED_LISTS: Record<string, string[]> = {
-  Competency: MASTERS.competencies, 'Tags / Labels': MASTERS.tags, Category: MASTERS.categories, 'Mode of Training': MASTERS.modes, 'Training Medium': MASTERS.mediums,
-  'Training Title': ['Advanced Credit Risk Management', 'AML & CFT Refresher', 'Information Security Awareness', 'Customer Experience Excellence', 'Leadership Essentials for Managers', 'Sustainable Finance Fundamentals'],
-  Venue: VENUES.map((v) => v.name), Vendor: VENDORS,
+  Competency: MASTERS.competencies, Category: MASTERS.categories, 'Mode of Training': MASTERS.modes, 'Training Medium': MASTERS.mediums,
 };
 
 function ListSetup({ tab }: { tab: string }) {
@@ -57,14 +59,15 @@ function ListSetup({ tab }: { tab: string }) {
 
 export function SetupMasters() {
   const s = useDemo();
-  const [tab, setTab] = useState(SETUP_TABS[0]);
+  const [params] = useSearchParams();
+  const TAB_PARAM: Record<string, string> = { feedback: 'Feedback Setup', calendar: 'Training Calendar', templates: 'Notification Templates', trainers: 'Trainer', venues: 'Venue', vendors: 'Vendor', tags: 'Tags / Labels', titles: 'Training Title', external: 'External Trainee' };
+  const [tab, setTab] = useState(TAB_PARAM[params.get('tab') ?? ''] ?? SETUP_TABS[0]);
   const [trainers, setTrainers] = useState(TRAINERS.map((t) => ({ ...t })));
   const [tModal, setTModal] = useState(false);
   const [tForm, setTForm] = useState({ type: 'Internal', eid: '', name: '', designation: '', institute: 'City Bank' });
   const [questions, setQuestions] = useState([['Content was relevant to my role', 'MCQ'], ['Trainer explained concepts clearly', 'Tick-box'], ['Venue and logistics', 'MCQ'], ['What should we improve?', 'Text box']]);
   const [q, setQ] = useState(''), [qt, setQt] = useState('MCQ');
-  const [externals, setExternals] = useState([['City Brokerage Ltd.', 'CBR-0211', 'Shams Arefin', 'Analyst', '01912-000000']]);
-  const [calUploaded, setCalUploaded] = useState(false);
+  const [externals, setExternals] = useState([['City Brokerage Ltd.', 'CBR-0211', 'Shams Arefin', 'Analyst', '01912-000000'], ...EXTERNAL_PARTICIPANTS.map((x) => [x.org.split(' · ')[0], x.id, x.name, x.org.split(' · ')[1] ?? '', '—'])]);
   const lookup = () => { const p = findByEid(tForm.eid); if (p) setTForm({ ...tForm, name: p.name, designation: p.designation, institute: 'City Bank' }); };
   const uploadCsv = (file: File | undefined, apply: (rows: string[][]) => void) => {
     if (!file) return;
@@ -72,12 +75,19 @@ export function SetupMasters() {
   };
   return (
     <div>
-      <PageHead title="Setup Options" fr="FR 22–48" meta="Master lists reused by the request, nomination, scheduling and bond screens" tags={<><SourceTag kind="concept">Partially demonstrated: changes stay on this screen in the demo</SourceTag><SourceTag kind="fictional" /></>} />
+      <PageHead title="Global master setup" fr="FR 22–48" meta="Reusable catalogues, faculty and vendor directories, the annual calendar, feedback forms and notification templates" tags={<><SourceTag kind="concept">Partially demonstrated: changes stay on this screen in the demo</SourceTag><SourceTag kind="fictional" /></>} />
+      <ul className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <li><StatCard label="Tags & categories" value={18} icon={SlidersHorizontal} sub="5 delivery mediums" onClick={() => setTab('Tags / Labels')} /></li>
+        <li><StatCard label="Master training titles" value={18} icon={FileText} tone="ink" sub="Duplicate check active" onClick={() => setTab('Training Title')} /></li>
+        <li><StatCard label="Trainers & venues" value={`${trainers.length} / 6`} icon={Building2} tone="ok" sub="4 approved vendors" onClick={() => setTab('Trainer')} /></li>
+        <li><StatCard label="Competency pillars" value={6} icon={Award} tone="amber" sub="6 core City Bank pillars" onClick={() => setTab('Competency')} /></li>
+      </ul>
       <div className="overflow-hidden rounded-2xl border border-line bg-white">
         <Tabs tabs={SETUP_TABS} value={tab} onChange={setTab} />
         <div className="p-6">
           <div className="mb-4"><FrRef>{SETUP_FR[tab]}</FrRef></div>
           {SEED_LISTS[tab] && <ListSetup key={tab} tab={tab} />}
+          {RECORD_TABS[tab] && <RecordSetup key={tab} tab={tab} />}
           {tab === 'Trainer' && (
             <div>
               <div className="mb-3 flex flex-wrap items-center gap-2"><span className="text-[15px] text-ink-2">Internal trainers pull their details from the Employee Database by Employee ID.</span><span className="flex-1" />
@@ -96,20 +106,23 @@ export function SetupMasters() {
               </Modal>
             </div>
           )}
-          {tab === 'Training Calendar' && (
-            <div className="space-y-4">
-              <p className="text-[16px] text-ink-2">The Admin uploads the approved yearly calendar. Scheduled trainings then accumulate here automatically (FR 43–44).</p>
-              <div className="flex flex-wrap gap-2">
-                <label className="inline-flex min-h-11 cursor-pointer items-center rounded-lg bg-brand px-4 text-[15px] font-bold text-white hover:bg-brand-dark">Upload approved calendar 2026<input type="file" className="hidden" onChange={() => { setCalUploaded(true); s.logEvent('admin', 'Training calendar uploaded', 'Approved calendar 2026 (simulated)'); }} /></label>
-                <Btn v="secondary" onClick={() => switchToCalendar()}>Open the training calendar</Btn>
-              </div>
-              {calUploaded && <Alert kind="ok" title="Approved calendar 2026 uploaded (simulated)" />}
-            </div>
-          )}
+          {tab === 'Training Calendar' && <CalendarSetup />}
           {tab === 'Feedback Setup' && (
             <div className="max-w-2xl space-y-3">
               {questions.map(([text, type]) => <div key={text} className="flex items-center justify-between rounded-lg border border-line px-4 py-3 text-[16px]"><span>{text}</span><Badge t="neutral">{type}</Badge></div>)}
               <div className="flex flex-wrap gap-2 pt-2"><input className={cx(inputCls, 'flex-1')} value={q} onChange={(e) => setQ(e.target.value)} placeholder="Add New Question" aria-label="Add New Question" /><select className={cx(inputCls, 'w-40')} value={qt} onChange={(e) => setQt(e.target.value)}><option>MCQ</option><option>Text box</option><option>Tick-box</option></select><Btn disabled={!q.trim()} onClick={() => { setQuestions([...questions, [q.trim(), qt]]); s.logEvent('hr', 'Feedback question added', `${q.trim()} · ${qt} (FR 45–46)`); setQ(''); }}>Add New Question</Btn></div>
+            </div>
+          )}
+          {tab === 'Notification Templates' && (
+            <div className="grid gap-6 xl:grid-cols-2">
+              <div>
+                <div className="mb-3 flex items-center justify-between"><h3 className="text-[18px] font-semibold">Notification templates ({NOTIFICATION_TEMPLATES.length})</h3><Btn onClick={() => s.logEvent('hr', 'Notification template created', 'New template (draft)')}>New template</Btn></div>
+                <ul className="space-y-3">{NOTIFICATION_TEMPLATES.map((t) => <li key={t.code} className="rounded-xl border border-line p-4"><div className="flex flex-wrap items-center gap-2"><b className="text-[16px]">{t.name}</b><span className="rounded bg-canvas px-1.5 font-mono text-[12px] ring-1 ring-line">{t.code}</span></div><div className="mt-1 text-[14px] text-ink-2">{t.subject}</div><div className="mt-2 flex flex-wrap gap-1.5">{t.channels.map((c) => <span key={c} className="rounded-full bg-canvas px-2.5 py-0.5 text-[13px]">{c}</span>)}</div></li>)}</ul>
+              </div>
+              <div>
+                <h3 className="mb-3 text-[18px] font-semibold">Feedback templates ({FEEDBACK_TEMPLATES.length})</h3>
+                <ul className="space-y-3">{FEEDBACK_TEMPLATES.map((t) => <li key={t.name} className="flex items-center justify-between rounded-xl border border-line p-4"><span><b className="block text-[16px]">{t.name}</b><span className="text-[14px] text-ink-3">{t.questions} questions · {t.scope}</span></span><Badge t={t.mode === 'Automatic' ? 'info' : 'neutral'}>{t.mode}</Badge></li>)}</ul>
+              </div>
             </div>
           )}
           {tab === 'External Trainee' && (
@@ -126,7 +139,6 @@ export function SetupMasters() {
     </div>
   );
 }
-const switchToCalendar = () => { window.location.hash = '#/hr/calendar'; };
 
 /* ---------------- Reports ---------------- */
 /* ---------------- Connected Bank ---------------- */
